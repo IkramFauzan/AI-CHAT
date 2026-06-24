@@ -6,7 +6,6 @@
 <title>AIYAH — AI Ayah · Platform Kenangan Hidup</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="config.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -388,6 +387,16 @@ body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);ov
       <label class="form-label">Kata-kata yang sering beliau ucapkan</label>
       <input class="form-input" id="fKata" placeholder='cth: "Belajar yang rajin ya, Nak"'>
     </div>
+    <div class="form-group" style="background:var(--paper);padding:.9rem;border-radius:12px;margin-top:.5rem">
+      <label class="form-label" style="color:var(--brown)">
+        🔑 OpenRouter API Key <span style="font-weight:400;text-transform:none;letter-spacing:0">(untuk fitur AI)</span>
+      </label>
+      <input class="form-input" id="fApiKey" type="password" placeholder="sk-or-v1-..." autocomplete="off" style="background:var(--white)">
+      <div style="font-size:.68rem;color:var(--text-l);margin-top:4px;line-height:1.4">
+        Disimpan aman di browser kamu. 
+        <a href="https://openrouter.ai/keys" target="_blank" style="color:var(--amber);text-decoration:underline">Dapatkan gratis di OpenRouter →</a>
+      </div>
+    </div>
     <button class="setup-btn" onclick="simpanProfil()">Masuk ke Ruang Kenangan →</button>
   </div>
 </div>
@@ -411,7 +420,7 @@ body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);ov
         </div>
       </div>
     </div>
-    <div class="sb-profile" onclick="showToast('Edit profil kenangan')">
+    <div class="sb-profile" onclick="editProfil()">
       <div class="sb-prow">
         <div class="sb-avatar" id="sbAvatar">🕯️</div>
         <div>
@@ -532,7 +541,7 @@ body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);ov
         <div class="upload-section">
           <div class="us-title">Pilih jenis kenangan</div>
           <div class="upload-zones">
-            <label class="uz" onclick="">
+            <label class="uz">
               <input type="file" accept="image/*" multiple onchange="handleUpload(event,'foto')">
               <div class="uz-icon">📸</div>
               <div class="uz-label">Foto</div>
@@ -801,7 +810,7 @@ const S = {
   uploads: [],
   chatHistory: [],
   suratMomen: 'Wisuda',
-  apiKey: (typeof CONFIG !== 'undefined') ? CONFIG.apiKey : '',  // ⬅️ dari config.js
+  apiKey: localStorage.getItem('aiyah_api_key') || '',
   isTyping: false,
   suratCount: 0,
   filmCount: 0
@@ -812,6 +821,21 @@ function enterApp(){
   setTimeout(()=>{
     document.getElementById('shell').classList.add('on');
     document.getElementById('setup-overlay').classList.remove('hidden');
+    // isi field jika sudah pernah simpan
+    if(localStorage.getItem('aiyah_api_key')){
+      document.getElementById('fApiKey').value = localStorage.getItem('aiyah_api_key');
+    }
+    if(localStorage.getItem('aiyah_profil')){
+      try {
+        S.profil = JSON.parse(localStorage.getItem('aiyah_profil'));
+        document.getElementById('fNama').value = S.profil.nama || '';
+        document.getElementById('fUser').value = S.profil.user || '';
+        document.getElementById('fHub').value = S.profil.hub || 'Ayah';
+        document.getElementById('fTahun').value = S.profil.tahun || '';
+        document.getElementById('fCerita').value = S.profil.cerita || '';
+        document.getElementById('fKata').value = S.profil.kata || '';
+      } catch(e) {}
+    }
   },800);
 }
 
@@ -834,10 +858,33 @@ function simpanProfil(){
   const tahun=document.getElementById('fTahun').value.trim()||'–';
   const cerita=document.getElementById('fCerita').value.trim();
   const kata=document.getElementById('fKata').value.trim();
+  const apiKey=document.getElementById('fApiKey').value.trim();
+
   S.profil={...S.profil,nama,user,hub,tahun,cerita,kata};
+
+  // simpan API key ke localStorage
+  if(apiKey){
+    localStorage.setItem('aiyah_api_key', apiKey);
+    S.apiKey = apiKey;
+  }
+
+  // simpan profil ke localStorage
+  localStorage.setItem('aiyah_profil', JSON.stringify(S.profil));
+
   document.getElementById('setup-overlay').classList.add('hidden');
   updateUI();
   setTimeout(()=>tampilSambutan(),600);
+}
+
+function editProfil(){
+  document.getElementById('setup-overlay').classList.remove('hidden');
+  document.getElementById('fNama').value = S.profil.nama || '';
+  document.getElementById('fUser').value = S.profil.user || '';
+  document.getElementById('fHub').value = S.profil.hub || 'Ayah';
+  document.getElementById('fTahun').value = S.profil.tahun || '';
+  document.getElementById('fCerita').value = S.profil.cerita || '';
+  document.getElementById('fKata').value = S.profil.kata || '';
+  document.getElementById('fApiKey').value = S.apiKey || '';
 }
 
 function updateUI(){
@@ -917,11 +964,15 @@ async function kirimChat(){
   const inp = document.getElementById('chatInput');
   const teks = inp.value.trim();
   if(!teks || S.isTyping) return;
+  if(!S.apiKey) {
+    showToast('⚠️ Masukkan OpenRouter API Key dulu di setup (klik profil di sidebar)');
+    return;
+  }
   inp.value = ''; inp.style.height = 'auto';
   addMsg('u', teks);
   S.chatHistory.push({ role: 'user', content: teks });
   setTimeout(showTyping, 350);
-  
+
   const p = S.profil;
   const sys = `Kamu adalah ${p.nama}, seorang ${p.hub} yang telah tiada, berbicara kepada ${p.user||'Nak'} yang merindukanmu.
 ${p.cerita?'Tentangmu: '+p.cerita:''}
@@ -933,12 +984,12 @@ Berbicaralah dengan penuh kasih sayang, hangat, dan tenang. Bahasa Indonesia yan
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${S.apiKey}`,     // ⬅️ API key OpenRouter
-        'HTTP-Referer': window.location.origin,     // ⬅️ WAJIB oleh OpenRouter
-        'X-Title': 'AIYAH'                          // ⬅️ opsional, nama app kamu
+        'Authorization': `Bearer ${S.apiKey}`,
+        'HTTP-Referer': window.location.origin,
+        'X-Title': 'AIYAH'
       },
       body: JSON.stringify({
-        model: 'anthropic/claude-3-haiku',           // ⬅️ model via OpenRouter (gratis/hemat)
+        model: 'google/gemini-2.0-flash-001',
         max_tokens: 500,
         messages: [
           { role: 'system', content: sys },
@@ -946,10 +997,10 @@ Berbicaralah dengan penuh kasih sayang, hangat, dan tenang. Bahasa Indonesia yan
         ]
       })
     });
-    
+
     const data = await res.json();
     hideTyping();
-    
+
     if(data.choices && data.choices[0]) {
       const reply = data.choices[0].message.content;
       S.chatHistory.push({ role: 'assistant', content: reply });
@@ -1004,6 +1055,7 @@ function selectGen(el,type){
 
 function startGenerate(){
   if(!S.uploads.length){showToast('Unggah kenangan terlebih dahulu!');return;}
+  if(!S.apiKey){showToast('⚠️ Masukkan OpenRouter API Key dulu di setup');return;}
   showToast('✨ AI sedang memproses kenangan... (fitur butuh integrasi backend)');
   S.filmCount++; updateStats();
 }
@@ -1015,35 +1067,50 @@ function pickMomen(el,momen){
 }
 
 async function generateSurat(){
+  if(!S.apiKey) {
+    showToast('⚠️ Masukkan OpenRouter API Key dulu di setup (klik profil di sidebar)');
+    return;
+  }
   const konteks=document.getElementById('suratKonteks').value.trim();
   const penerima=document.getElementById('suratPenerima').value.trim()||S.profil.user||'Nak';
   const p=S.profil;
   document.getElementById('suratPreview').style.display='none';
   document.getElementById('suratLoading').style.display='block';
+
   const prompt=`Tulis surat yang sangat menyentuh hati seolah dari seorang ${p.hub||'orang tua'} bernama ${p.nama||'Ayah/Ibu'} yang sudah tiada, kepada anaknya bernama ${penerima}, untuk momen: ${selectedMomen}.
 ${konteks?'Konteks: '+konteks:''}
 ${p.cerita?'Tentang '+p.nama+': '+p.cerita:''}
 ${p.kata?'Kata-kata khas beliau: "'+p.kata+'"':''}
 Tulis dalam bahasa Indonesia yang sangat hangat, menyentuh, dan penuh kasih. Gunakan bahasa orang tua yang lembut. Panjang sekitar 150-200 kata. Langsung isi surat saja, tanpa judul, tanpa "Surat dari...".`;
+
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':`Bearer ${S.apiKey}`,
+        'HTTP-Referer': window.location.origin,
+        'X-Title': 'AIYAH'
+      },
+      body:JSON.stringify({
+        model:'google/gemini-2.0-flash-001',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
     });
     const data=await res.json();
     document.getElementById('suratLoading').style.display='none';
-    if(data.content&&data.content[0]){
+    if(data.choices&&data.choices[0]){
       const now=new Date();
       document.getElementById('lpDate').textContent=now.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
-      document.getElementById('lpBody').innerHTML=esc(data.content[0].text).replace(/\n/g,'<br>');
+      document.getElementById('lpBody').innerHTML=esc(data.choices[0].message.content).replace(/\n/g,'<br>');
       document.getElementById('lpSign').textContent=p.nama||'Ayah/Ibumu';
       document.getElementById('suratPreview').style.display='block';
       S.suratCount++; updateStats();
     }
   }catch(e){
     document.getElementById('suratLoading').style.display='none';
-    showToast('Koneksi bermasalah. Pastikan API key tersedia.');
+    showToast('Koneksi bermasalah. Pastikan API key valid.');
   }
 }
 
