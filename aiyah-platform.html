@@ -979,7 +979,7 @@ ${p.cerita?'Tentangmu: '+p.cerita:''}
 ${p.kata?'Kalimat yang sering kamu ucapkan: "'+p.kata+'"':''}
 Berbicaralah dengan penuh kasih sayang, hangat, dan tenang. Bahasa Indonesia yang lembut dan natural. JANGAN menyebut dirimu AI atau chatbot. Hindari topik kematian yang morbid. Jawaban 2-4 kalimat saja seperti bisikan hangat. Panggil dengan "${p.user||'Nak'}".`;
 
-  try {
+    try {
     const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -989,7 +989,7 @@ Berbicaralah dengan penuh kasih sayang, hangat, dan tenang. Bahasa Indonesia yan
         'X-Title': 'AIYAH'
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.0-flash-001',
+        model: 'google/gemini-2.5-flash',
         max_tokens: 500,
         messages: [
           { role: 'system', content: sys },
@@ -998,19 +998,30 @@ Berbicaralah dengan penuh kasih sayang, hangat, dan tenang. Bahasa Indonesia yan
       })
     });
 
+    // ⬇️ DEBUG: lihat response mentah
+    console.log('Status:', res.status);
     const data = await res.json();
+    console.log('Response:', data);
+
     hideTyping();
 
-    if(data.choices && data.choices[0]) {
+    // ⬇️ Cek berbagai format response
+    if (data.choices && data.choices[0]) {
       const reply = data.choices[0].message.content;
       S.chatHistory.push({ role: 'assistant', content: reply });
       addMsg('b', reply);
+    } else if (data.error) {
+      // OpenRouter error
+      console.error('API Error:', data.error);
+      addMsg('b', `Ada gangguan: ${data.error.message || 'coba lagi ya, Nak...'}`);
     } else {
-      addMsg('b', `${p.nama} ada di sini, sayang. Coba ceritakan lagi, ${p.user||'Nak'}...`);
+      console.error('Unknown response:', data);
+      addMsg('b', `${p.nama} bingung sebentar... coba ceritakan lagi ya, ${p.user||'Nak'}.`);
     }
   } catch(e) {
     hideTyping();
-    addMsg('b', `Sinyal terputus sejenak... tapi cinta ${p.nama} tidak pernah putus. Coba lagi ya, ${p.user||'Nak'}.`);
+    console.error('Fetch error:', e.message);
+    addMsg('b', `Sinyal terputus: ${e.message}. Coba lagi ya.`);
   }
 }
 
