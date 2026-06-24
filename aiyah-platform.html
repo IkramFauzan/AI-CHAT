@@ -1,1151 +1,2887 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIYAH — AI Ayah · Platform Kenangan Hidup</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --cream:#FDF7F0;
-  --paper:#F5EADA;
-  --amber:#C8904A;
-  --amber-l:#E8C08A;
-  --brown:#7A5230;
-  --brown-d:#3A1A00;
-  --text:#2C1A08;
-  --text-m:#8A6A50;
-  --text-l:#B89878;
-  --border:rgba(122,82,48,0.14);
-  --white:#FFFFFF;
-  --shadow:0 2px 24px rgba(58,26,0,0.07);
-}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIYAH — AI Ayah · Platform Kenangan Hidup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-/* ── SPLASH ── */
-#splash{position:fixed;inset:0;background:var(--brown-d);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 1s,visibility 1s}
-#splash.out{opacity:0;visibility:hidden}
-.splash-logo{margin-bottom:2rem;animation:logo-in 1.2s cubic-bezier(.16,1,.3,1) forwards;opacity:0;transform:translateY(20px)}
-@keyframes logo-in{to{opacity:1;transform:none}}
-.splash-flame{animation:flicker 1.8s ease-in-out infinite alternate;transform-origin:50% 85%}
-@keyframes flicker{0%{transform:scaleX(1) scaleY(1) rotate(-1.5deg)}50%{transform:scaleX(0.92) scaleY(1.06) rotate(1deg)}100%{transform:scaleX(1.04) scaleY(0.96) rotate(-0.5deg)}}
-.splash-glow{animation:glow 2s ease-in-out infinite alternate}
-@keyframes glow{from{opacity:.5}to{opacity:1}}
-.splash-brand{font-family:'Lora',serif;font-size:2.8rem;font-weight:600;color:#F5DEB3;letter-spacing:0.06em;text-align:center;margin-bottom:.4rem;animation:logo-in 1.4s .2s cubic-bezier(.16,1,.3,1) forwards;opacity:0}
-.splash-tagline{font-size:.9rem;color:rgba(245,222,179,.5);letter-spacing:.1em;font-style:italic;text-align:center;margin-bottom:3rem;animation:logo-in 1.4s .4s cubic-bezier(.16,1,.3,1) forwards;opacity:0}
-.splash-btn{border:1px solid rgba(245,222,179,.35);color:#F5DEB3;background:transparent;font-family:'Lora',serif;font-size:1rem;padding:.8rem 2.8rem;border-radius:40px;cursor:pointer;letter-spacing:.06em;transition:all .3s;animation:logo-in 1.4s .6s cubic-bezier(.16,1,.3,1) forwards;opacity:0}
-.splash-btn:hover{background:rgba(245,222,179,.1);border-color:rgba(245,222,179,.65)}
+    :root {
+      --cream: #FDF7F0;
+      --paper: #F5EADA;
+      --amber: #C8904A;
+      --amber-l: #E8C08A;
+      --brown: #7A5230;
+      --brown-d: #3A1A00;
+      --text: #2C1A08;
+      --text-m: #8A6A50;
+      --text-l: #B89878;
+      --border: rgba(122, 82, 48, 0.14);
+      --white: #FFFFFF;
+      --shadow: 0 2px 24px rgba(58, 26, 0, 0.07);
+    }
 
-/* ── SHELL ── */
-#shell{display:none;min-height:100vh}
-#shell.on{display:flex}
+    html {
+      scroll-behavior: smooth
+    }
 
-/* ── SIDEBAR ── */
-.sidebar{width:260px;min-height:100vh;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
-.sb-head{padding:1.5rem 1.4rem 1rem;border-bottom:1px solid var(--border)}
-.sb-logo{display:flex;align-items:center;gap:10px}
-.sb-icon{width:36px;height:36px;background:var(--brown-d);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.sb-name{font-family:'Lora',serif;font-size:1.3rem;font-weight:600;color:var(--brown-d);letter-spacing:.03em}
-.sb-sub{font-size:.7rem;color:var(--text-l);margin-top:1px}
-.sb-profile{padding:1rem 1.4rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
-.sb-profile:hover{background:var(--paper)}
-.sb-prow{display:flex;align-items:center;gap:10px}
-.sb-avatar{width:42px;height:42px;border-radius:50%;background:var(--paper);border:2px solid var(--amber-l);display:flex;align-items:center;justify-content:center;font-size:1.2rem;overflow:hidden;flex-shrink:0}
-.sb-avatar img{width:100%;height:100%;object-fit:cover}
-.sb-pname{font-size:.9rem;font-weight:500;color:var(--text)}
-.sb-prelation{font-size:.75rem;color:var(--text-l);font-style:italic}
-.sb-nav{padding:.8rem 0;flex:1}
-.nav-item{display:flex;align-items:center;gap:10px;padding:.65rem 1.4rem;font-size:.88rem;color:var(--text-m);cursor:pointer;transition:all .2s;border-left:3px solid transparent;text-decoration:none}
-.nav-item:hover{background:var(--paper);color:var(--text)}
-.nav-item.active{background:var(--paper);color:var(--brown-d);border-left-color:var(--amber);font-weight:500}
-.nav-icon{font-size:1.1rem;width:22px;text-align:center}
-.nav-badge{margin-left:auto;background:var(--amber);color:#fff;font-size:.65rem;padding:1px 7px;border-radius:20px;font-weight:600}
-.sb-footer{padding:1rem 1.4rem;border-top:1px solid var(--border)}
-.sb-footer-text{font-size:.72rem;color:var(--text-l);line-height:1.5;font-style:italic}
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden
+    }
 
-/* ── MAIN ── */
-.main{flex:1;min-width:0;display:flex;flex-direction:column}
+    /* ── SPLASH ── */
+    #splash {
+      position: fixed;
+      inset: 0;
+      background: var(--brown-d);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 1s, visibility 1s
+    }
 
-/* ── PAGES ── */
-.page{display:none;flex:1;flex-direction:column}
-.page.active{display:flex}
+    #splash.out {
+      opacity: 0;
+      visibility: hidden
+    }
 
-/* PAGE HEADER */
-.pg-header{padding:1.5rem 2rem 1rem;border-bottom:1px solid var(--border);background:rgba(255,255,255,.8);backdrop-filter:blur(8px);position:sticky;top:0;z-index:5}
-.pg-title{font-family:'Lora',serif;font-size:1.4rem;font-weight:600;color:var(--brown-d)}
-.pg-sub{font-size:.82rem;color:var(--text-m);margin-top:3px}
+    .splash-logo {
+      margin-bottom: 2rem;
+      animation: logo-in 1.2s cubic-bezier(.16, 1, .3, 1) forwards;
+      opacity: 0;
+      transform: translateY(20px)
+    }
 
-/* ── HOME PAGE ── */
-.home-content{padding:2rem;max-width:860px}
-.welcome-banner{background:var(--brown-d);border-radius:16px;padding:2rem 2.2rem;margin-bottom:2rem;position:relative;overflow:hidden}
-.wb-glow{position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(200,144,74,.15)}
-.wb-title{font-family:'Lora',serif;font-size:1.5rem;color:#F5DEB3;margin-bottom:.4rem}
-.wb-sub{font-size:.88rem;color:rgba(245,222,179,.6);line-height:1.6}
-.wb-candles{position:absolute;right:2rem;top:50%;transform:translateY(-50%);font-size:2.4rem;opacity:.6}
+    @keyframes logo-in {
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
 
-.quick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:2rem}
-.quick-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.2rem;cursor:pointer;transition:all .2s;text-align:center}
-.quick-card:hover{border-color:var(--amber-l);box-shadow:var(--shadow);transform:translateY(-2px)}
-.qc-icon{font-size:2rem;margin-bottom:.6rem}
-.qc-title{font-size:.88rem;font-weight:500;color:var(--text)}
-.qc-sub{font-size:.75rem;color:var(--text-l);margin-top:2px}
+    .splash-flame {
+      animation: flicker 1.8s ease-in-out infinite alternate;
+      transform-origin: 50% 85%
+    }
 
-.memory-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-bottom:2rem}
-.stat-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem}
-.stat-num{font-size:1.6rem;font-weight:600;color:var(--brown-d)}
-.stat-label{font-size:.75rem;color:var(--text-l);margin-top:2px}
+    @keyframes flicker {
+      0% {
+        transform: scaleX(1) scaleY(1) rotate(-1.5deg)
+      }
 
-.recent-memories{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.rm-head{padding:1rem 1.3rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.rm-title{font-size:.88rem;font-weight:500}
-.rm-link{font-size:.78rem;color:var(--amber);cursor:pointer}
-.memory-item{display:flex;align-items:center;gap:12px;padding:.85rem 1.3rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
-.memory-item:last-child{border-bottom:none}
-.memory-item:hover{background:var(--paper)}
-.mi-thumb{width:44px;height:44px;border-radius:10px;background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;overflow:hidden}
-.mi-thumb img{width:100%;height:100%;object-fit:cover}
-.mi-info{flex:1}
-.mi-name{font-size:.85rem;font-weight:500}
-.mi-type{font-size:.75rem;color:var(--text-l)}
-.mi-date{font-size:.72rem;color:var(--text-l)}
+      50% {
+        transform: scaleX(0.92) scaleY(1.06) rotate(1deg)
+      }
 
-/* ── CHAT PAGE ── */
-.chat-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden}
-.chat-topbar{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--white)}
-.ct-avatar{width:44px;height:44px;border-radius:50%;background:var(--paper);border:2px solid var(--amber-l);display:flex;align-items:center;justify-content:center;font-size:1.3rem;overflow:hidden;flex-shrink:0}
-.ct-avatar img{width:100%;height:100%;object-fit:cover}
-.ct-name{font-size:1rem;font-weight:500;color:var(--brown-d)}
-.ct-status{font-size:.75rem;color:var(--text-l);font-style:italic}
-.ct-badge{margin-left:auto;background:var(--paper);border:1px solid var(--border);font-size:.72rem;padding:4px 12px;border-radius:20px;color:var(--text-m)}
-.chat-messages{flex:1;overflow-y:auto;padding:1.5rem;scroll-behavior:smooth}
-.date-sep{text-align:center;margin:1.2rem 0;position:relative}
-.date-sep::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)}
-.date-sep span{background:var(--cream);padding:0 1rem;font-size:.72rem;color:var(--text-l);position:relative;font-style:italic}
-.msg-row{margin-bottom:1rem;display:flex;flex-direction:column}
-.msg-row.u{align-items:flex-end}
-.msg-row.b{align-items:flex-start}
-.bubble{max-width:70%;padding:.85rem 1.1rem;border-radius:18px;font-size:.92rem;line-height:1.65}
-.msg-row.u .bubble{background:var(--brown-d);color:#F5EBD8;border-bottom-right-radius:4px}
-.msg-row.b .bubble{background:var(--white);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:4px;font-family:'Lora',serif;font-style:italic}
-.msg-time{font-size:.68rem;color:var(--text-l);margin-top:.25rem;padding:0 .3rem}
-.typing-ind{display:flex;gap:4px;padding:.8rem 1rem;background:var(--white);border:1px solid var(--border);border-radius:18px;border-bottom-left-radius:4px;width:fit-content}
-.typing-ind span{width:6px;height:6px;border-radius:50%;background:var(--amber-l);animation:bounce 1.2s ease-in-out infinite}
-.typing-ind span:nth-child(2){animation-delay:.2s}
-.typing-ind span:nth-child(3){animation-delay:.4s}
-@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-5px);opacity:1}}
-.quick-prompts{display:flex;flex-wrap:wrap;gap:.5rem;padding:.8rem 1.5rem;border-top:1px solid var(--border);background:var(--white)}
-.qp-chip{font-size:.78rem;padding:.35rem .9rem;border:1px solid var(--border);border-radius:20px;color:var(--text-m);cursor:pointer;transition:all .2s;font-style:italic;background:transparent}
-.qp-chip:hover{background:var(--paper);border-color:var(--amber-l);color:var(--brown)}
-.chat-input-bar{padding:1rem 1.5rem;border-top:1px solid var(--border);background:var(--cream)}
-.cib-inner{display:flex;gap:.8rem;align-items:flex-end}
-.chat-ta{flex:1;padding:.7rem 1rem;border:1px solid var(--border);border-radius:22px;font-family:'Inter',sans-serif;font-size:.92rem;color:var(--text);background:var(--white);outline:none;resize:none;min-height:42px;max-height:110px;overflow-y:auto;line-height:1.5;transition:border-color .2s}
-.chat-ta:focus{border-color:var(--amber)}
-.chat-ta::placeholder{color:var(--text-l)}
-.send-btn{width:42px;height:42px;border-radius:50%;background:var(--brown-d);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,transform .1s}
-.send-btn:hover{background:var(--amber)}
-.send-btn:active{transform:scale(.9)}
-.send-btn svg{fill:#F5DEB3}
+      100% {
+        transform: scaleX(1.04) scaleY(0.96) rotate(-0.5deg)
+      }
+    }
 
-/* ── UPLOAD PAGE ── */
-.upload-content{padding:2rem;max-width:700px}
-.upload-section{margin-bottom:2rem}
-.us-title{font-size:.82rem;font-weight:500;color:var(--text-m);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px}
-.upload-zones{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-.uz{border:1.5px dashed var(--amber-l);border-radius:14px;padding:1.8rem 1rem;text-align:center;cursor:pointer;transition:all .2s;background:transparent}
-.uz:hover{background:var(--paper);border-color:var(--amber)}
-.uz input{display:none}
-.uz-icon{font-size:2rem;margin-bottom:.6rem}
-.uz-label{font-size:.85rem;font-weight:500;color:var(--text)}
-.uz-sub{font-size:.75rem;color:var(--text-l);margin-top:3px}
-.uploaded-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:14px}
-.uploaded-item{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:1;background:var(--paper);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:2rem}
-.uploaded-item img{width:100%;height:100%;object-fit:cover}
-.ui-remove{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(58,26,0,.7);color:#fff;border:none;cursor:pointer;font-size:.7rem;display:flex;align-items:center;justify-content:center}
-.ui-type-badge{position:absolute;bottom:4px;left:4px;font-size:.6rem;background:rgba(58,26,0,.65);color:#F5DEB3;padding:2px 6px;border-radius:8px}
+    .splash-glow {
+      animation: glow 2s ease-in-out infinite alternate
+    }
 
-.generate-section{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.5rem}
-.gen-title{font-family:'Lora',serif;font-size:1.1rem;font-weight:500;color:var(--brown-d);margin-bottom:.4rem}
-.gen-sub{font-size:.82rem;color:var(--text-m);margin-bottom:1.2rem;line-height:1.55}
-.gen-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.2rem}
-.gen-opt{border:1.5px solid var(--border);border-radius:12px;padding:1rem;cursor:pointer;transition:all .2s;text-align:center}
-.gen-opt:hover{border-color:var(--amber-l);background:var(--paper)}
-.gen-opt.selected{border-color:var(--amber);background:var(--paper)}
-.go-icon{font-size:1.6rem;margin-bottom:.4rem}
-.go-title{font-size:.85rem;font-weight:500}
-.go-sub{font-size:.72rem;color:var(--text-l);margin-top:2px}
-.gen-btn{width:100%;padding:.9rem;background:var(--brown-d);color:#F5DEB3;border:none;border-radius:12px;font-family:'Lora',serif;font-size:1rem;cursor:pointer;transition:background .2s}
-.gen-btn:hover{background:var(--brown)}
+    @keyframes glow {
+      from {
+        opacity: .5
+      }
 
-/* ── FILM PAGE ── */
-.film-content{padding:2rem;max-width:760px}
-.film-player{background:#111;border-radius:16px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;position:relative;overflow:hidden}
-.fp-placeholder{text-align:center;color:rgba(255,255,255,.35)}
-.fp-icon{font-size:3rem;margin-bottom:.8rem}
-.fp-text{font-size:.85rem}
-.fp-controls{position:absolute;bottom:0;left:0;right:0;padding:1rem 1.2rem;background:linear-gradient(transparent,rgba(0,0,0,.7))}
-.fp-bar{height:3px;background:rgba(255,255,255,.2);border-radius:2px;margin-bottom:.7rem;cursor:pointer}
-.fp-progress{height:100%;width:0%;background:var(--amber);border-radius:2px;transition:width .3s}
-.fp-btns{display:flex;align-items:center;gap:.8rem}
-.fp-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:background .2s}
-.fp-btn:hover{background:rgba(255,255,255,.3)}
-.fp-dur{font-size:.75rem;color:rgba(255,255,255,.6);margin-left:auto}
-.film-meta{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1.5rem}
-.fm-title{font-family:'Lora',serif;font-size:1.1rem;font-weight:500;color:var(--brown-d);margin-bottom:.3rem}
-.fm-sub{font-size:.8rem;color:var(--text-m);line-height:1.55}
-.fm-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.8rem}
-.fm-tag{font-size:.72rem;padding:3px 10px;border-radius:20px;background:var(--paper);color:var(--text-m);border:1px solid var(--border)}
-.film-list-title{font-size:.82rem;font-weight:500;color:var(--text-m);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px}
-.film-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
-.film-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s}
-.film-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
-.fc-thumb{aspect-ratio:16/9;background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:2rem}
-.fc-info{padding:.8rem 1rem}
-.fc-title{font-size:.85rem;font-weight:500}
-.fc-dur{font-size:.72rem;color:var(--text-l);margin-top:2px}
+      to {
+        opacity: 1
+      }
+    }
 
-/* ── ALTAR PAGE ── */
-.altar-content{padding:2rem;max-width:700px}
-.altar-hero{background:var(--brown-d);border-radius:20px;padding:2.5rem;text-align:center;margin-bottom:2rem;position:relative;overflow:hidden}
-.ah-bg{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(200,144,74,.12) 0%,transparent 70%)}
-.ah-avatar{width:90px;height:90px;border-radius:50%;border:3px solid rgba(245,222,179,.35);background:rgba(245,222,179,.1);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:2.5rem;overflow:hidden;position:relative}
-.ah-avatar img{width:100%;height:100%;object-fit:cover}
-.ah-name{font-family:'Lora',serif;font-size:1.6rem;font-weight:500;color:#F5DEB3;margin-bottom:.25rem}
-.ah-dates{font-size:.82rem;color:rgba(245,222,179,.5);margin-bottom:1.2rem}
-.ah-candles{display:flex;justify-content:center;gap:1.5rem;margin-bottom:1.2rem}
-.ah-candle{font-size:1.8rem;animation:flicker 2s ease-in-out infinite alternate}
-.ah-candle:nth-child(2){animation-delay:.5s;animation-duration:2.3s}
-.ah-candle:nth-child(3){animation-delay:1s;animation-duration:1.7s}
-.ah-quote{font-family:'Lora',serif;font-style:italic;font-size:.9rem;color:rgba(245,222,179,.65);line-height:1.65}
-.altar-sections{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:2rem}
-.altar-section{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.as-head{padding:.9rem 1.1rem;border-bottom:1px solid var(--border)}
-.as-title{font-size:.85rem;font-weight:500}
-.as-sub{font-size:.72rem;color:var(--text-l);margin-top:1px}
-.as-body{padding:.8rem 1.1rem}
-.msg-note{padding:.7rem .9rem;background:var(--paper);border-radius:10px;margin-bottom:.6rem;font-size:.82rem;line-height:1.55;color:var(--text)}
-.msg-note-author{font-size:.7rem;color:var(--text-l);margin-top:.3rem}
-.add-note-btn{width:100%;padding:.6rem;border:1px dashed var(--border);border-radius:10px;background:transparent;font-size:.8rem;color:var(--text-l);cursor:pointer;transition:all .2s;margin-top:.4rem}
-.add-note-btn:hover{background:var(--paper);border-color:var(--amber-l)}
-.photo-strip{display:flex;gap:.5rem;overflow-x:auto;padding:.2rem 0}
-.ps-photo{width:64px;height:64px;border-radius:10px;background:var(--paper);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.5rem;overflow:hidden;border:1px solid var(--border);cursor:pointer}
-.ps-photo img{width:100%;height:100%;object-fit:cover}
-.ps-add{border-style:dashed;color:var(--text-l)}
-.share-section{background:var(--paper);border-radius:14px;padding:1.2rem 1.4rem;display:flex;align-items:center;gap:1rem}
-.ss-info{flex:1}
-.ss-title{font-size:.9rem;font-weight:500}
-.ss-sub{font-size:.78rem;color:var(--text-m);margin-top:2px;line-height:1.5}
-.share-btn{padding:.6rem 1.4rem;background:var(--brown-d);color:#F5DEB3;border:none;border-radius:10px;font-size:.82rem;cursor:pointer;white-space:nowrap;transition:background .2s}
-.share-btn:hover{background:var(--brown)}
+    .splash-brand {
+      font-family: 'Lora', serif;
+      font-size: 2.8rem;
+      font-weight: 600;
+      color: #F5DEB3;
+      letter-spacing: 0.06em;
+      text-align: center;
+      margin-bottom: .4rem;
+      animation: logo-in 1.4s .2s cubic-bezier(.16, 1, .3, 1) forwards;
+      opacity: 0
+    }
 
-/* ── SURAT PAGE ── */
-.surat-content{padding:2rem;max-width:680px}
-.surat-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;margin-bottom:2rem}
-.sp-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:1.1rem;text-align:center;cursor:pointer;transition:all .2s}
-.sp-card:hover{border-color:var(--amber-l);transform:translateY(-2px)}
-.sp-card.sel{border-color:var(--amber);background:var(--paper)}
-.sp-icon{font-size:2rem;margin-bottom:.5rem}
-.sp-title{font-size:.85rem;font-weight:500}
-.surat-preview{background:var(--white);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-.letter-paper{padding:2.5rem 2.8rem;background:#FFFDF8;position:relative}
-.letter-paper::before{content:'';position:absolute;left:2.2rem;top:0;bottom:0;width:1px;background:rgba(200,144,74,.15)}
-.lp-date{font-size:.78rem;color:var(--text-l);margin-bottom:1.5rem;font-style:italic}
-.lp-body{font-family:'Lora',serif;font-size:.95rem;line-height:1.85;color:var(--text);font-style:italic}
-.lp-sign{margin-top:2rem;font-family:'Lora',serif;font-style:italic;color:var(--brown)}
-.lp-sign strong{display:block;font-size:1.1rem;font-weight:500}
-.surat-actions{padding:1rem 1.4rem;border-top:1px solid var(--border);display:flex;gap:.6rem}
-.sa-btn{flex:1;padding:.65rem;border:1px solid var(--border);border-radius:10px;background:transparent;font-size:.82rem;cursor:pointer;transition:all .2s;color:var(--text-m)}
-.sa-btn:hover{background:var(--paper)}
-.sa-btn.primary{background:var(--brown-d);color:#F5DEB3;border-color:var(--brown-d)}
-.sa-btn.primary:hover{background:var(--brown)}
-.surat-form{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.4rem;margin-bottom:1.5rem}
-.sf-label{font-size:.78rem;font-weight:500;color:var(--text-m);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.4rem;display:block}
-.sf-input{width:100%;padding:.65rem .9rem;border:1px solid var(--border);border-radius:10px;font-family:'Inter',sans-serif;font-size:.88rem;color:var(--text);background:var(--cream);outline:none;margin-bottom:.9rem;transition:border-color .2s}
-.sf-input:focus{border-color:var(--amber)}
-.sf-ta{height:80px;resize:none}
-.sf-gen-btn{width:100%;padding:.8rem;background:var(--brown-d);color:#F5DEB3;border:none;border-radius:12px;font-family:'Lora',serif;font-size:.95rem;cursor:pointer;transition:background .2s}
-.sf-gen-btn:hover{background:var(--brown)}
-.loading-letter{text-align:center;padding:3rem;color:var(--text-l);font-family:'Lora',serif;font-style:italic}
-.ll-anim{font-size:2rem;animation:pulse 1.5s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+    .splash-tagline {
+      font-size: .9rem;
+      color: rgba(245, 222, 179, .5);
+      letter-spacing: .1em;
+      font-style: italic;
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: logo-in 1.4s .4s cubic-bezier(.16, 1, .3, 1) forwards;
+      opacity: 0
+    }
 
-/* ── WARISAN PAGE ── */
-.warisan-content{padding:2rem;max-width:700px}
-.wisdom-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem}
-.wisdom-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.4rem;position:relative;overflow:hidden}
-.wc-accent{position:absolute;top:0;left:0;width:3px;height:100%;background:var(--amber)}
-.wc-category{font-size:.7rem;font-weight:500;color:var(--text-l);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.6rem}
-.wc-quote{font-family:'Lora',serif;font-style:italic;font-size:.9rem;line-height:1.65;color:var(--text)}
-.wc-source{font-size:.72rem;color:var(--text-l);margin-top:.7rem}
-.wc-heart{position:absolute;top:.8rem;right:.9rem;cursor:pointer;font-size:1rem;color:var(--text-l);transition:color .2s}
-.wc-heart.liked{color:#E24B4A}
-.nilai-section{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin-bottom:2rem}
-.ns-title{font-size:.88rem;font-weight:500;margin-bottom:1rem}
-.nilai-item{display:flex;align-items:center;gap:1rem;margin-bottom:.9rem}
-.ni-label{font-size:.82rem;color:var(--text-m);width:100px;flex-shrink:0}
-.ni-bar-wrap{flex:1;height:8px;background:var(--paper);border-radius:4px;overflow:hidden}
-.ni-bar{height:100%;background:var(--amber);border-radius:4px;transition:width .8s cubic-bezier(.22,1,.36,1)}
-.ni-pct{font-size:.75rem;color:var(--text-l);width:36px;text-align:right}
+    .splash-btn {
+      border: 1px solid rgba(245, 222, 179, .35);
+      color: #F5DEB3;
+      background: transparent;
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      padding: .8rem 2.8rem;
+      border-radius: 40px;
+      cursor: pointer;
+      letter-spacing: .06em;
+      transition: all .3s;
+      animation: logo-in 1.4s .6s cubic-bezier(.16, 1, .3, 1) forwards;
+      opacity: 0
+    }
 
-/* ── TOAST ── */
-.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--brown-d);color:#F5DEB3;padding:.7rem 1.6rem;border-radius:30px;font-size:.85rem;opacity:0;pointer-events:none;transition:all .3s;z-index:9998}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .splash-btn:hover {
+      background: rgba(245, 222, 179, .1);
+      border-color: rgba(245, 222, 179, .65)
+    }
 
-/* ── SETUP OVERLAY ── */
-#setup-overlay{position:fixed;inset:0;background:rgba(58,26,0,.55);z-index:8888;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-#setup-overlay.hidden{display:none}
-.setup-modal{background:var(--white);border-radius:20px;padding:2.5rem 2.2rem;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(58,26,0,.25);max-height:90vh;overflow-y:auto}
-.sm-title{font-family:'Lora',serif;font-size:1.4rem;font-weight:600;color:var(--brown-d);text-align:center;margin-bottom:.3rem}
-.sm-sub{font-size:.82rem;color:var(--text-m);text-align:center;margin-bottom:1.8rem;line-height:1.55}
-.form-group{margin-bottom:1rem}
-.form-label{display:block;font-size:.75rem;font-weight:500;color:var(--text-m);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.4rem}
-.form-input,.form-select,.form-ta{width:100%;padding:.65rem .9rem;border:1px solid var(--border);border-radius:10px;font-family:'Inter',sans-serif;font-size:.9rem;color:var(--text);background:var(--cream);outline:none;transition:border-color .2s}
-.form-input:focus,.form-select:focus,.form-ta:focus{border-color:var(--amber)}
-.form-ta{height:85px;resize:none}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-.photo-up{border:1.5px dashed var(--amber-l);border-radius:12px;padding:1.2rem;text-align:center;cursor:pointer;transition:background .2s;background:var(--cream);margin-bottom:1rem}
-.photo-up:hover{background:var(--paper)}
-.photo-up input{display:none}
-.pu-preview{width:70px;height:70px;border-radius:50%;object-fit:cover;margin:0 auto .4rem;display:block;border:2px solid var(--amber-l)}
-.pu-label{font-size:.82rem;color:var(--text-m);cursor:pointer}
-.setup-btn{width:100%;padding:.9rem;background:var(--brown-d);color:#F5DEB3;border:none;border-radius:12px;font-family:'Lora',serif;font-size:1rem;cursor:pointer;margin-top:.5rem;transition:background .2s}
-.setup-btn:hover{background:var(--brown)}
+    /* ── SHELL ── */
+    #shell {
+      display: none;
+      min-height: 100vh
+    }
 
-@media(max-width:640px){
-  .sidebar{display:none}
-  .form-row{grid-template-columns:1fr}
-  .altar-sections,.wisdom-cards{grid-template-columns:1fr}
-  .gen-options{grid-template-columns:1fr}
-}
-</style>
+    #shell.on {
+      display: flex
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 260px;
+      min-height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto
+    }
+
+    .sb-head {
+      padding: 1.5rem 1.4rem 1rem;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .sb-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .sb-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--brown-d);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .sb-name {
+      font-family: 'Lora', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--brown-d);
+      letter-spacing: .03em
+    }
+
+    .sb-sub {
+      font-size: .7rem;
+      color: var(--text-l);
+      margin-top: 1px
+    }
+
+    .sb-profile {
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background .2s
+    }
+
+    .sb-profile:hover {
+      background: var(--paper)
+    }
+
+    .sb-prow {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .sb-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 2px solid var(--amber-l);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      overflow: hidden;
+      flex-shrink: 0
+    }
+
+    .sb-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .sb-pname {
+      font-size: .9rem;
+      font-weight: 500;
+      color: var(--text)
+    }
+
+    .sb-prelation {
+      font-size: .75rem;
+      color: var(--text-l);
+      font-style: italic
+    }
+
+    .sb-nav {
+      padding: .8rem 0;
+      flex: 1
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: .65rem 1.4rem;
+      font-size: .88rem;
+      color: var(--text-m);
+      cursor: pointer;
+      transition: all .2s;
+      border-left: 3px solid transparent;
+      text-decoration: none
+    }
+
+    .nav-item:hover {
+      background: var(--paper);
+      color: var(--text)
+    }
+
+    .nav-item.active {
+      background: var(--paper);
+      color: var(--brown-d);
+      border-left-color: var(--amber);
+      font-weight: 500
+    }
+
+    .nav-icon {
+      font-size: 1.1rem;
+      width: 22px;
+      text-align: center
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--amber);
+      color: #fff;
+      font-size: .65rem;
+      padding: 1px 7px;
+      border-radius: 20px;
+      font-weight: 600
+    }
+
+    .sb-footer {
+      padding: 1rem 1.4rem;
+      border-top: 1px solid var(--border)
+    }
+
+    .sb-footer-text {
+      font-size: .72rem;
+      color: var(--text-l);
+      line-height: 1.5;
+      font-style: italic
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column
+    }
+
+    /* ── PAGES ── */
+    .page {
+      display: none;
+      flex: 1;
+      flex-direction: column
+    }
+
+    .page.active {
+      display: flex
+    }
+
+    /* PAGE HEADER */
+    .pg-header {
+      padding: 1.5rem 2rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, .8);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 5
+    }
+
+    .pg-title {
+      font-family: 'Lora', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--brown-d)
+    }
+
+    .pg-sub {
+      font-size: .82rem;
+      color: var(--text-m);
+      margin-top: 3px
+    }
+
+    /* ── HOME PAGE ── */
+    .home-content {
+      padding: 2rem;
+      max-width: 860px
+    }
+
+    .welcome-banner {
+      background: var(--brown-d);
+      border-radius: 16px;
+      padding: 2rem 2.2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden
+    }
+
+    .wb-glow {
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(200, 144, 74, .15)
+    }
+
+    .wb-title {
+      font-family: 'Lora', serif;
+      font-size: 1.5rem;
+      color: #F5DEB3;
+      margin-bottom: .4rem
+    }
+
+    .wb-sub {
+      font-size: .88rem;
+      color: rgba(245, 222, 179, .6);
+      line-height: 1.6
+    }
+
+    .wb-candles {
+      position: absolute;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.4rem;
+      opacity: .6
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 2rem
+    }
+
+    .quick-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.2rem;
+      cursor: pointer;
+      transition: all .2s;
+      text-align: center
+    }
+
+    .quick-card:hover {
+      border-color: var(--amber-l);
+      box-shadow: var(--shadow);
+      transform: translateY(-2px)
+    }
+
+    .qc-icon {
+      font-size: 2rem;
+      margin-bottom: .6rem
+    }
+
+    .qc-title {
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--text)
+    }
+
+    .qc-sub {
+      font-size: .75rem;
+      color: var(--text-l);
+      margin-top: 2px
+    }
+
+    .memory-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 2rem
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.1rem
+    }
+
+    .stat-num {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--brown-d)
+    }
+
+    .stat-label {
+      font-size: .75rem;
+      color: var(--text-l);
+      margin-top: 2px
+    }
+
+    .recent-memories {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden
+    }
+
+    .rm-head {
+      padding: 1rem 1.3rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .rm-title {
+      font-size: .88rem;
+      font-weight: 500
+    }
+
+    .rm-link {
+      font-size: .78rem;
+      color: var(--amber);
+      cursor: pointer
+    }
+
+    .memory-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: .85rem 1.3rem;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background .2s
+    }
+
+    .memory-item:last-child {
+      border-bottom: none
+    }
+
+    .memory-item:hover {
+      background: var(--paper)
+    }
+
+    .mi-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      overflow: hidden
+    }
+
+    .mi-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .mi-info {
+      flex: 1
+    }
+
+    .mi-name {
+      font-size: .85rem;
+      font-weight: 500
+    }
+
+    .mi-type {
+      font-size: .75rem;
+      color: var(--text-l)
+    }
+
+    .mi-date {
+      font-size: .72rem;
+      color: var(--text-l)
+    }
+
+    /* ── CHAT PAGE ── */
+    .chat-wrap {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden
+    }
+
+    .chat-topbar {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--white)
+    }
+
+    .ct-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 2px solid var(--amber-l);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      overflow: hidden;
+      flex-shrink: 0
+    }
+
+    .ct-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .ct-name {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--brown-d)
+    }
+
+    .ct-status {
+      font-size: .75rem;
+      color: var(--text-l);
+      font-style: italic
+    }
+
+    .ct-badge {
+      margin-left: auto;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      font-size: .72rem;
+      padding: 4px 12px;
+      border-radius: 20px;
+      color: var(--text-m)
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      scroll-behavior: smooth
+    }
+
+    .date-sep {
+      text-align: center;
+      margin: 1.2rem 0;
+      position: relative
+    }
+
+    .date-sep::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--border)
+    }
+
+    .date-sep span {
+      background: var(--cream);
+      padding: 0 1rem;
+      font-size: .72rem;
+      color: var(--text-l);
+      position: relative;
+      font-style: italic
+    }
+
+    .msg-row {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column
+    }
+
+    .msg-row.u {
+      align-items: flex-end
+    }
+
+    .msg-row.b {
+      align-items: flex-start
+    }
+
+    .bubble {
+      max-width: 70%;
+      padding: .85rem 1.1rem;
+      border-radius: 18px;
+      font-size: .92rem;
+      line-height: 1.65
+    }
+
+    .msg-row.u .bubble {
+      background: var(--brown-d);
+      color: #F5EBD8;
+      border-bottom-right-radius: 4px
+    }
+
+    .msg-row.b .bubble {
+      background: var(--white);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-bottom-left-radius: 4px;
+      font-family: 'Lora', serif;
+      font-style: italic
+    }
+
+    .msg-time {
+      font-size: .68rem;
+      color: var(--text-l);
+      margin-top: .25rem;
+      padding: 0 .3rem
+    }
+
+    .typing-ind {
+      display: flex;
+      gap: 4px;
+      padding: .8rem 1rem;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      border-bottom-left-radius: 4px;
+      width: fit-content
+    }
+
+    .typing-ind span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber-l);
+      animation: bounce 1.2s ease-in-out infinite
+    }
+
+    .typing-ind span:nth-child(2) {
+      animation-delay: .2s
+    }
+
+    .typing-ind span:nth-child(3) {
+      animation-delay: .4s
+    }
+
+    @keyframes bounce {
+
+      0%,
+      60%,
+      100% {
+        transform: translateY(0);
+        opacity: .5
+      }
+
+      30% {
+        transform: translateY(-5px);
+        opacity: 1
+      }
+    }
+
+    .quick-prompts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      padding: .8rem 1.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--white)
+    }
+
+    .qp-chip {
+      font-size: .78rem;
+      padding: .35rem .9rem;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--text-m);
+      cursor: pointer;
+      transition: all .2s;
+      font-style: italic;
+      background: transparent
+    }
+
+    .qp-chip:hover {
+      background: var(--paper);
+      border-color: var(--amber-l);
+      color: var(--brown)
+    }
+
+    .chat-input-bar {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--cream)
+    }
+
+    .cib-inner {
+      display: flex;
+      gap: .8rem;
+      align-items: flex-end
+    }
+
+    .chat-ta {
+      flex: 1;
+      padding: .7rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      font-family: 'Inter', sans-serif;
+      font-size: .92rem;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+      resize: none;
+      min-height: 42px;
+      max-height: 110px;
+      overflow-y: auto;
+      line-height: 1.5;
+      transition: border-color .2s
+    }
+
+    .chat-ta:focus {
+      border-color: var(--amber)
+    }
+
+    .chat-ta::placeholder {
+      color: var(--text-l)
+    }
+
+    .send-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--brown-d);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background .2s, transform .1s
+    }
+
+    .send-btn:hover {
+      background: var(--amber)
+    }
+
+    .send-btn:active {
+      transform: scale(.9)
+    }
+
+    .send-btn svg {
+      fill: #F5DEB3
+    }
+
+    /* ── UPLOAD PAGE ── */
+    .upload-content {
+      padding: 2rem;
+      max-width: 700px
+    }
+
+    .upload-section {
+      margin-bottom: 2rem
+    }
+
+    .us-title {
+      font-size: .82rem;
+      font-weight: 500;
+      color: var(--text-m);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      margin-bottom: 12px
+    }
+
+    .upload-zones {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px
+    }
+
+    .uz {
+      border: 1.5px dashed var(--amber-l);
+      border-radius: 14px;
+      padding: 1.8rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s;
+      background: transparent
+    }
+
+    .uz:hover {
+      background: var(--paper);
+      border-color: var(--amber)
+    }
+
+    .uz input {
+      display: none
+    }
+
+    .uz-icon {
+      font-size: 2rem;
+      margin-bottom: .6rem
+    }
+
+    .uz-label {
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--text)
+    }
+
+    .uz-sub {
+      font-size: .75rem;
+      color: var(--text-l);
+      margin-top: 3px
+    }
+
+    .uploaded-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 10px;
+      margin-top: 14px
+    }
+
+    .uploaded-item {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem
+    }
+
+    .uploaded-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .ui-remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(58, 26, 0, .7);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: .7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .ui-type-badge {
+      position: absolute;
+      bottom: 4px;
+      left: 4px;
+      font-size: .6rem;
+      background: rgba(58, 26, 0, .65);
+      color: #F5DEB3;
+      padding: 2px 6px;
+      border-radius: 8px
+    }
+
+    .generate-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem
+    }
+
+    .gen-title {
+      font-family: 'Lora', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--brown-d);
+      margin-bottom: .4rem
+    }
+
+    .gen-sub {
+      font-size: .82rem;
+      color: var(--text-m);
+      margin-bottom: 1.2rem;
+      line-height: 1.55
+    }
+
+    .gen-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 1.2rem
+    }
+
+    .gen-opt {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all .2s;
+      text-align: center
+    }
+
+    .gen-opt:hover {
+      border-color: var(--amber-l);
+      background: var(--paper)
+    }
+
+    .gen-opt.selected {
+      border-color: var(--amber);
+      background: var(--paper)
+    }
+
+    .go-icon {
+      font-size: 1.6rem;
+      margin-bottom: .4rem
+    }
+
+    .go-title {
+      font-size: .85rem;
+      font-weight: 500
+    }
+
+    .go-sub {
+      font-size: .72rem;
+      color: var(--text-l);
+      margin-top: 2px
+    }
+
+    .gen-btn {
+      width: 100%;
+      padding: .9rem;
+      background: var(--brown-d);
+      color: #F5DEB3;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background .2s
+    }
+
+    .gen-btn:hover {
+      background: var(--brown)
+    }
+
+    /* ── FILM PAGE ── */
+    .film-content {
+      padding: 2rem;
+      max-width: 760px
+    }
+
+    .film-player {
+      background: #111;
+      border-radius: 16px;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden
+    }
+
+    .fp-placeholder {
+      text-align: center;
+      color: rgba(255, 255, 255, .35)
+    }
+
+    .fp-icon {
+      font-size: 3rem;
+      margin-bottom: .8rem
+    }
+
+    .fp-text {
+      font-size: .85rem
+    }
+
+    .fp-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem 1.2rem;
+      background: linear-gradient(transparent, rgba(0, 0, 0, .7))
+    }
+
+    .fp-bar {
+      height: 3px;
+      background: rgba(255, 255, 255, .2);
+      border-radius: 2px;
+      margin-bottom: .7rem;
+      cursor: pointer
+    }
+
+    .fp-progress {
+      height: 100%;
+      width: 0%;
+      background: var(--amber);
+      border-radius: 2px;
+      transition: width .3s
+    }
+
+    .fp-btns {
+      display: flex;
+      align-items: center;
+      gap: .8rem
+    }
+
+    .fp-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .15);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .9rem;
+      transition: background .2s
+    }
+
+    .fp-btn:hover {
+      background: rgba(255, 255, 255, .3)
+    }
+
+    .fp-dur {
+      font-size: .75rem;
+      color: rgba(255, 255, 255, .6);
+      margin-left: auto
+    }
+
+    .film-meta {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1.5rem
+    }
+
+    .fm-title {
+      font-family: 'Lora', serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--brown-d);
+      margin-bottom: .3rem
+    }
+
+    .fm-sub {
+      font-size: .8rem;
+      color: var(--text-m);
+      line-height: 1.55
+    }
+
+    .fm-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-top: .8rem
+    }
+
+    .fm-tag {
+      font-size: .72rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--paper);
+      color: var(--text-m);
+      border: 1px solid var(--border)
+    }
+
+    .film-list-title {
+      font-size: .82rem;
+      font-weight: 500;
+      color: var(--text-m);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      margin-bottom: 12px
+    }
+
+    .film-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px
+    }
+
+    .film-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .film-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px)
+    }
+
+    .fc-thumb {
+      aspect-ratio: 16/9;
+      background: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem
+    }
+
+    .fc-info {
+      padding: .8rem 1rem
+    }
+
+    .fc-title {
+      font-size: .85rem;
+      font-weight: 500
+    }
+
+    .fc-dur {
+      font-size: .72rem;
+      color: var(--text-l);
+      margin-top: 2px
+    }
+
+    /* ── ALTAR PAGE ── */
+    .altar-content {
+      padding: 2rem;
+      max-width: 700px
+    }
+
+    .altar-hero {
+      background: var(--brown-d);
+      border-radius: 20px;
+      padding: 2.5rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden
+    }
+
+    .ah-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(200, 144, 74, .12) 0%, transparent 70%)
+    }
+
+    .ah-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid rgba(245, 222, 179, .35);
+      background: rgba(245, 222, 179, .1);
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      overflow: hidden;
+      position: relative
+    }
+
+    .ah-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .ah-name {
+      font-family: 'Lora', serif;
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: #F5DEB3;
+      margin-bottom: .25rem
+    }
+
+    .ah-dates {
+      font-size: .82rem;
+      color: rgba(245, 222, 179, .5);
+      margin-bottom: 1.2rem
+    }
+
+    .ah-candles {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1.2rem
+    }
+
+    .ah-candle {
+      font-size: 1.8rem;
+      animation: flicker 2s ease-in-out infinite alternate
+    }
+
+    .ah-candle:nth-child(2) {
+      animation-delay: .5s;
+      animation-duration: 2.3s
+    }
+
+    .ah-candle:nth-child(3) {
+      animation-delay: 1s;
+      animation-duration: 1.7s
+    }
+
+    .ah-quote {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: .9rem;
+      color: rgba(245, 222, 179, .65);
+      line-height: 1.65
+    }
+
+    .altar-sections {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 2rem
+    }
+
+    .altar-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden
+    }
+
+    .as-head {
+      padding: .9rem 1.1rem;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .as-title {
+      font-size: .85rem;
+      font-weight: 500
+    }
+
+    .as-sub {
+      font-size: .72rem;
+      color: var(--text-l);
+      margin-top: 1px
+    }
+
+    .as-body {
+      padding: .8rem 1.1rem
+    }
+
+    .msg-note {
+      padding: .7rem .9rem;
+      background: var(--paper);
+      border-radius: 10px;
+      margin-bottom: .6rem;
+      font-size: .82rem;
+      line-height: 1.55;
+      color: var(--text)
+    }
+
+    .msg-note-author {
+      font-size: .7rem;
+      color: var(--text-l);
+      margin-top: .3rem
+    }
+
+    .add-note-btn {
+      width: 100%;
+      padding: .6rem;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      background: transparent;
+      font-size: .8rem;
+      color: var(--text-l);
+      cursor: pointer;
+      transition: all .2s;
+      margin-top: .4rem
+    }
+
+    .add-note-btn:hover {
+      background: var(--paper);
+      border-color: var(--amber-l)
+    }
+
+    .photo-strip {
+      display: flex;
+      gap: .5rem;
+      overflow-x: auto;
+      padding: .2rem 0
+    }
+
+    .ps-photo {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      background: var(--paper);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      cursor: pointer
+    }
+
+    .ps-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .ps-add {
+      border-style: dashed;
+      color: var(--text-l)
+    }
+
+    .share-section {
+      background: var(--paper);
+      border-radius: 14px;
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem
+    }
+
+    .ss-info {
+      flex: 1
+    }
+
+    .ss-title {
+      font-size: .9rem;
+      font-weight: 500
+    }
+
+    .ss-sub {
+      font-size: .78rem;
+      color: var(--text-m);
+      margin-top: 2px;
+      line-height: 1.5
+    }
+
+    .share-btn {
+      padding: .6rem 1.4rem;
+      background: var(--brown-d);
+      color: #F5DEB3;
+      border: none;
+      border-radius: 10px;
+      font-size: .82rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .2s
+    }
+
+    .share-btn:hover {
+      background: var(--brown)
+    }
+
+    /* ── SURAT PAGE ── */
+    .surat-content {
+      padding: 2rem;
+      max-width: 680px
+    }
+
+    .surat-pick {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 12px;
+      margin-bottom: 2rem
+    }
+
+    .sp-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 1.1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .sp-card:hover {
+      border-color: var(--amber-l);
+      transform: translateY(-2px)
+    }
+
+    .sp-card.sel {
+      border-color: var(--amber);
+      background: var(--paper)
+    }
+
+    .sp-icon {
+      font-size: 2rem;
+      margin-bottom: .5rem
+    }
+
+    .sp-title {
+      font-size: .85rem;
+      font-weight: 500
+    }
+
+    .surat-preview {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden
+    }
+
+    .letter-paper {
+      padding: 2.5rem 2.8rem;
+      background: #FFFDF8;
+      position: relative
+    }
+
+    .letter-paper::before {
+      content: '';
+      position: absolute;
+      left: 2.2rem;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: rgba(200, 144, 74, .15)
+    }
+
+    .lp-date {
+      font-size: .78rem;
+      color: var(--text-l);
+      margin-bottom: 1.5rem;
+      font-style: italic
+    }
+
+    .lp-body {
+      font-family: 'Lora', serif;
+      font-size: .95rem;
+      line-height: 1.85;
+      color: var(--text);
+      font-style: italic
+    }
+
+    .lp-sign {
+      margin-top: 2rem;
+      font-family: 'Lora', serif;
+      font-style: italic;
+      color: var(--brown)
+    }
+
+    .lp-sign strong {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 500
+    }
+
+    .surat-actions {
+      padding: 1rem 1.4rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: .6rem
+    }
+
+    .sa-btn {
+      flex: 1;
+      padding: .65rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: transparent;
+      font-size: .82rem;
+      cursor: pointer;
+      transition: all .2s;
+      color: var(--text-m)
+    }
+
+    .sa-btn:hover {
+      background: var(--paper)
+    }
+
+    .sa-btn.primary {
+      background: var(--brown-d);
+      color: #F5DEB3;
+      border-color: var(--brown-d)
+    }
+
+    .sa-btn.primary:hover {
+      background: var(--brown)
+    }
+
+    .surat-form {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.4rem;
+      margin-bottom: 1.5rem
+    }
+
+    .sf-label {
+      font-size: .78rem;
+      font-weight: 500;
+      color: var(--text-m);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: .4rem;
+      display: block
+    }
+
+    .sf-input {
+      width: 100%;
+      padding: .65rem .9rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: .88rem;
+      color: var(--text);
+      background: var(--cream);
+      outline: none;
+      margin-bottom: .9rem;
+      transition: border-color .2s
+    }
+
+    .sf-input:focus {
+      border-color: var(--amber)
+    }
+
+    .sf-ta {
+      height: 80px;
+      resize: none
+    }
+
+    .sf-gen-btn {
+      width: 100%;
+      padding: .8rem;
+      background: var(--brown-d);
+      color: #F5DEB3;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Lora', serif;
+      font-size: .95rem;
+      cursor: pointer;
+      transition: background .2s
+    }
+
+    .sf-gen-btn:hover {
+      background: var(--brown)
+    }
+
+    .loading-letter {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-l);
+      font-family: 'Lora', serif;
+      font-style: italic
+    }
+
+    .ll-anim {
+      font-size: 2rem;
+      animation: pulse 1.5s ease-in-out infinite
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: .4
+      }
+
+      50% {
+        opacity: 1
+      }
+    }
+
+    /* ── WARISAN PAGE ── */
+    .warisan-content {
+      padding: 2rem;
+      max-width: 700px
+    }
+
+    .wisdom-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 2rem
+    }
+
+    .wisdom-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.2rem 1.4rem;
+      position: relative;
+      overflow: hidden
+    }
+
+    .wc-accent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--amber)
+    }
+
+    .wc-category {
+      font-size: .7rem;
+      font-weight: 500;
+      color: var(--text-l);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: .6rem
+    }
+
+    .wc-quote {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: .9rem;
+      line-height: 1.65;
+      color: var(--text)
+    }
+
+    .wc-source {
+      font-size: .72rem;
+      color: var(--text-l);
+      margin-top: .7rem
+    }
+
+    .wc-heart {
+      position: absolute;
+      top: .8rem;
+      right: .9rem;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--text-l);
+      transition: color .2s
+    }
+
+    .wc-heart.liked {
+      color: #E24B4A
+    }
+
+    .nilai-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem;
+      margin-bottom: 2rem
+    }
+
+    .ns-title {
+      font-size: .88rem;
+      font-weight: 500;
+      margin-bottom: 1rem
+    }
+
+    .nilai-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: .9rem
+    }
+
+    .ni-label {
+      font-size: .82rem;
+      color: var(--text-m);
+      width: 100px;
+      flex-shrink: 0
+    }
+
+    .ni-bar-wrap {
+      flex: 1;
+      height: 8px;
+      background: var(--paper);
+      border-radius: 4px;
+      overflow: hidden
+    }
+
+    .ni-bar {
+      height: 100%;
+      background: var(--amber);
+      border-radius: 4px;
+      transition: width .8s cubic-bezier(.22, 1, .36, 1)
+    }
+
+    .ni-pct {
+      font-size: .75rem;
+      color: var(--text-l);
+      width: 36px;
+      text-align: right
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--brown-d);
+      color: #F5DEB3;
+      padding: .7rem 1.6rem;
+      border-radius: 30px;
+      font-size: .85rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: all .3s;
+      z-index: 9998
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0)
+    }
+
+    /* ── SETUP OVERLAY ── */
+    #setup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(58, 26, 0, .55);
+      z-index: 8888;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px)
+    }
+
+    #setup-overlay.hidden {
+      display: none
+    }
+
+    .setup-modal {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 2.5rem 2.2rem;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(58, 26, 0, .25);
+      max-height: 90vh;
+      overflow-y: auto
+    }
+
+    .sm-title {
+      font-family: 'Lora', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--brown-d);
+      text-align: center;
+      margin-bottom: .3rem
+    }
+
+    .sm-sub {
+      font-size: .82rem;
+      color: var(--text-m);
+      text-align: center;
+      margin-bottom: 1.8rem;
+      line-height: 1.55
+    }
+
+    .form-group {
+      margin-bottom: 1rem
+    }
+
+    .form-label {
+      display: block;
+      font-size: .75rem;
+      font-weight: 500;
+      color: var(--text-m);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: .4rem
+    }
+
+    .form-input,
+    .form-select,
+    .form-ta {
+      width: 100%;
+      padding: .65rem .9rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: .9rem;
+      color: var(--text);
+      background: var(--cream);
+      outline: none;
+      transition: border-color .2s
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-ta:focus {
+      border-color: var(--amber)
+    }
+
+    .form-ta {
+      height: 85px;
+      resize: none
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .8rem
+    }
+
+    .photo-up {
+      border: 1.5px dashed var(--amber-l);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s;
+      background: var(--cream);
+      margin-bottom: 1rem
+    }
+
+    .photo-up:hover {
+      background: var(--paper)
+    }
+
+    .photo-up input {
+      display: none
+    }
+
+    .pu-preview {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto .4rem;
+      display: block;
+      border: 2px solid var(--amber-l)
+    }
+
+    .pu-label {
+      font-size: .82rem;
+      color: var(--text-m);
+      cursor: pointer
+    }
+
+    .setup-btn {
+      width: 100%;
+      padding: .9rem;
+      background: var(--brown-d);
+      color: #F5DEB3;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: .5rem;
+      transition: background .2s
+    }
+
+    .setup-btn:hover {
+      background: var(--brown)
+    }
+
+    @media(max-width:640px) {
+      .sidebar {
+        display: none
+      }
+
+      .form-row {
+        grid-template-columns: 1fr
+      }
+
+      .altar-sections,
+      .wisdom-cards {
+        grid-template-columns: 1fr
+      }
+
+      .gen-options {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
 
-<!-- SPLASH -->
-<div id="splash">
-  <div class="splash-logo">
-    <svg width="70" height="150" viewBox="0 0 70 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="35" cy="30" rx="14" ry="22" fill="#FFD060" class="splash-glow" opacity=".85"/>
-      <ellipse cx="35" cy="37" rx="9" ry="14" fill="#FFF4A0" opacity=".8"/>
-      <ellipse cx="35" cy="42" rx="5" ry="8" fill="white" opacity=".55"/>
-      <rect x="33" y="50" width="4" height="10" rx="2" fill="#4A2E10" class="splash-flame"/>
-      <path d="M22 58 Q19 72 20 84" stroke="#EDD5B0" stroke-width="4" stroke-linecap="round" fill="none" opacity=".45"/>
-      <rect x="20" y="58" width="30" height="80" rx="7" fill="#F5DEB3"/>
-      <rect x="20" y="58" width="30" height="16" rx="6" fill="#EDD5B0"/>
-      <ellipse cx="35" cy="138" rx="20" ry="7" fill="#C8A060" opacity=".6"/>
-    </svg>
+  <!-- SPLASH -->
+  <div id="splash">
+    <div class="splash-logo">
+      <svg width="70" height="150" viewBox="0 0 70 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="35" cy="30" rx="14" ry="22" fill="#FFD060" class="splash-glow" opacity=".85" />
+        <ellipse cx="35" cy="37" rx="9" ry="14" fill="#FFF4A0" opacity=".8" />
+        <ellipse cx="35" cy="42" rx="5" ry="8" fill="white" opacity=".55" />
+        <rect x="33" y="50" width="4" height="10" rx="2" fill="#4A2E10" class="splash-flame" />
+        <path d="M22 58 Q19 72 20 84" stroke="#EDD5B0" stroke-width="4" stroke-linecap="round" fill="none"
+          opacity=".45" />
+        <rect x="20" y="58" width="30" height="80" rx="7" fill="#F5DEB3" />
+        <rect x="20" y="58" width="30" height="16" rx="6" fill="#EDD5B0" />
+        <ellipse cx="35" cy="138" rx="20" ry="7" fill="#C8A060" opacity=".6" />
+      </svg>
+    </div>
+    <p class="splash-brand">AIYAH</p>
+    <p class="splash-tagline">AI Ayah · AI Ibu · Platform Kenangan Hidup</p>
+    <button class="splash-btn" onclick="enterApp()">Masuk dengan Tenang</button>
   </div>
-  <p class="splash-brand">AIYAH</p>
-  <p class="splash-tagline">AI Ayah · AI Ibu · Platform Kenangan Hidup</p>
-  <button class="splash-btn" onclick="enterApp()">Masuk dengan Tenang</button>
-</div>
 
-<!-- SETUP OVERLAY -->
-<div id="setup-overlay">
-  <div class="setup-modal">
-    <div style="text-align:center;font-size:2rem;margin-bottom:.8rem">🕯️</div>
-    <h2 class="sm-title">Siapa yang kamu rindukan?</h2>
-    <p class="sm-sub">Ceritakan sedikit tentang mereka agar AIYAH bisa hadir seperti benar-benar mereka.</p>
-    <div class="photo-up" onclick="document.getElementById('puInput').click()">
-      <img id="puPreview" class="pu-preview" src="" alt="" style="display:none">
-      <input type="file" id="puInput" accept="image/*" onchange="previewPU(event)">
-      <div class="pu-label" id="puLabel">📷 Unggah foto mereka (opsional)</div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Nama</label>
-        <input class="form-input" id="fNama" placeholder="cth: Ayah Hasan">
+  <!-- SETUP OVERLAY -->
+  <div id="setup-overlay">
+    <div class="setup-modal">
+      <div style="text-align:center;font-size:2rem;margin-bottom:.8rem">🕯️</div>
+      <h2 class="sm-title">Siapa yang kamu rindukan?</h2>
+      <p class="sm-sub">Ceritakan sedikit tentang mereka agar AIYAH bisa hadir seperti benar-benar mereka.</p>
+      <div class="photo-up" onclick="document.getElementById('puInput').click()">
+        <img id="puPreview" class="pu-preview" src="" alt="" style="display:none">
+        <input type="file" id="puInput" accept="image/*" onchange="previewPU(event)">
+        <div class="pu-label" id="puLabel">📷 Unggah foto mereka (opsional)</div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Panggilmu</label>
-        <input class="form-input" id="fUser" placeholder="cth: Nak / Dik">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Hubungan</label>
-        <select class="form-select" id="fHub">
-          <option>Ayah</option><option>Ibu</option><option>Kakek</option><option>Nenek</option>
-          <option>Kakak</option><option>Adik</option><option>Suami</option><option>Istri</option><option>Sahabat</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Lahir – Wafat</label>
-        <input class="form-input" id="fTahun" placeholder="1950 – 2021">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Cerita singkat tentang mereka</label>
-      <textarea class="form-ta" id="fCerita" placeholder="Sifat, kebiasaan, hal favorit, kenangan tak terlupakan..."></textarea>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Kata-kata yang sering beliau ucapkan</label>
-      <input class="form-input" id="fKata" placeholder='cth: "Belajar yang rajin ya, Nak"'>
-    </div>
-    <div class="form-group" style="background:var(--paper);padding:.9rem;border-radius:12px;margin-top:.5rem">
-      <label class="form-label" style="color:var(--brown)">
-        🔑 OpenRouter API Key <span style="font-weight:400;text-transform:none;letter-spacing:0">(untuk fitur AI)</span>
-      </label>
-      <input class="form-input" id="fApiKey" type="password" placeholder="sk-or-v1-..." autocomplete="off" style="background:var(--white)">
-      <div style="font-size:.68rem;color:var(--text-l);margin-top:4px;line-height:1.4">
-        Disimpan aman di browser kamu. 
-        <a href="https://openrouter.ai/keys" target="_blank" style="color:var(--amber);text-decoration:underline">Dapatkan gratis di OpenRouter →</a>
-      </div>
-    </div>
-    <button class="setup-btn" onclick="simpanProfil()">Masuk ke Ruang Kenangan →</button>
-  </div>
-</div>
-
-<!-- SHELL -->
-<div id="shell">
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="sb-head">
-      <div class="sb-logo">
-        <div class="sb-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="7" r="3.5" fill="#F5DEB3" opacity=".9"/>
-            <path d="M4 18c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#F5DEB3" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".7"/>
-            <path d="M14.5 4 L15.5 3 M14.5 7 L16 7 M13.5 10 L14.5 11" stroke="#EF9F27" stroke-width="1" stroke-linecap="round" opacity=".6"/>
-          </svg>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nama</label>
+          <input class="form-input" id="fNama" placeholder="cth: Ayah Hasan">
         </div>
-        <div>
-          <div class="sb-name">AIYAH</div>
-          <div class="sb-sub">Platform Kenangan Hidup</div>
+        <div class="form-group">
+          <label class="form-label">Panggilmu</label>
+          <input class="form-input" id="fUser" placeholder="cth: Nak / Dik">
         </div>
       </div>
-    </div>
-    <div class="sb-profile" onclick="editProfil()">
-      <div class="sb-prow">
-        <div class="sb-avatar" id="sbAvatar">🕯️</div>
-        <div>
-          <div class="sb-pname" id="sbName">–</div>
-          <div class="sb-prelation" id="sbRelation">–</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Hubungan</label>
+          <select class="form-select" id="fHub">
+            <option>Ayah</option>
+            <option>Ibu</option>
+            <option>Kakek</option>
+            <option>Nenek</option>
+            <option>Kakak</option>
+            <option>Adik</option>
+            <option>Suami</option>
+            <option>Istri</option>
+            <option>Sahabat</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lahir – Wafat</label>
+          <input class="form-input" id="fTahun" placeholder="1950 – 2021">
         </div>
       </div>
-    </div>
-    <nav class="sb-nav">
-      <a class="nav-item active" onclick="showPage('home',this)"><span class="nav-icon">🏡</span> Beranda</a>
-      <a class="nav-item" onclick="showPage('chat',this)"><span class="nav-icon">💬</span> Ruang Bicara <span class="nav-badge">AI</span></a>
-      <a class="nav-item" onclick="showPage('upload',this)"><span class="nav-icon">📁</span> Unggah Kenangan</a>
-      <a class="nav-item" onclick="showPage('film',this)"><span class="nav-icon">🎞️</span> Film Kenangan <span class="nav-badge">AI</span></a>
-      <a class="nav-item" onclick="showPage('surat',this)"><span class="nav-icon">✍️</span> Surat dari Mereka <span class="nav-badge">AI</span></a>
-      <a class="nav-item" onclick="showPage('altar',this)"><span class="nav-icon">🕯️</span> Altar Digital</a>
-      <a class="nav-item" onclick="showPage('warisan',this)"><span class="nav-icon">🧬</span> Warisan Nilai</a>
-    </nav>
-    <div class="sb-footer">
-      <div class="sb-footer-text">AIYAH hadir untuk menjaga cinta yang tidak pernah benar-benar pergi. 🕯️</div>
+      <div class="form-group">
+        <label class="form-label">Cerita singkat tentang mereka</label>
+        <textarea class="form-ta" id="fCerita"
+          placeholder="Sifat, kebiasaan, hal favorit, kenangan tak terlupakan..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Kata-kata yang sering beliau ucapkan</label>
+        <input class="form-input" id="fKata" placeholder='cth: "Belajar yang rajin ya, Nak"'>
+      </div>
+      <div class="form-group" style="background:var(--paper);padding:.9rem;border-radius:12px;margin-top:.5rem">
+        <label class="form-label" style="color:var(--brown)">
+          🔑 OpenRouter API Key <span style="font-weight:400;text-transform:none;letter-spacing:0">(untuk fitur
+            AI)</span>
+        </label>
+        <input class="form-input" id="fApiKey" type="password" placeholder="sk-or-v1-..." autocomplete="off"
+          style="background:var(--white)">
+        <div style="font-size:.68rem;color:var(--text-l);margin-top:4px;line-height:1.4">
+          Disimpan aman di browser kamu.
+          <a href="https://openrouter.ai/keys" target="_blank"
+            style="color:var(--amber);text-decoration:underline">Dapatkan gratis di OpenRouter →</a>
+        </div>
+      </div>
+      <button class="setup-btn" onclick="simpanProfil()">Masuk ke Ruang Kenangan →</button>
     </div>
   </div>
 
-  <!-- MAIN -->
-  <div class="main">
-
-    <!-- ── HOME ── -->
-    <div class="page active" id="page-home">
-      <div class="pg-header">
-        <div class="pg-title">Selamat Datang di AIYAH</div>
-        <div class="pg-sub" id="homeSubtitle">Platform kenangan hidup untuk mereka yang kita cintai</div>
-      </div>
-      <div class="home-content">
-        <div class="welcome-banner">
-          <div class="wb-glow"></div>
-          <div class="wb-candles">🕯️🕯️</div>
-          <div class="wb-title" id="wbTitle">Halo, Selamat Datang</div>
-          <div class="wb-sub" id="wbSub">Ruang ini adalah milik kalian berdua. Ceritakan apa saja, kenang apa saja — mereka selalu di sini.</div>
-        </div>
-        <div class="quick-grid">
-          <div class="quick-card" onclick="showPage('chat',document.querySelector('[onclick*=chat]'))">
-            <div class="qc-icon">💬</div>
-            <div class="qc-title">Bicara sekarang</div>
-            <div class="qc-sub">Curhat & berbagi cerita</div>
+  <!-- SHELL -->
+  <div id="shell">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sb-head">
+        <div class="sb-logo">
+          <div class="sb-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="7" r="3.5" fill="#F5DEB3" opacity=".9" />
+              <path d="M4 18c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#F5DEB3" stroke-width="1.4" stroke-linecap="round"
+                fill="none" opacity=".7" />
+              <path d="M14.5 4 L15.5 3 M14.5 7 L16 7 M13.5 10 L14.5 11" stroke="#EF9F27" stroke-width="1"
+                stroke-linecap="round" opacity=".6" />
+            </svg>
           </div>
-          <div class="quick-card" onclick="showPage('film',document.querySelector('[onclick*=film]'))">
-            <div class="qc-icon">🎞️</div>
-            <div class="qc-title">Buat film kenangan</div>
-            <div class="qc-sub">Dari foto & video kamu</div>
-          </div>
-          <div class="quick-card" onclick="showPage('surat',document.querySelector('[onclick*=surat]'))">
-            <div class="qc-icon">✍️</div>
-            <div class="qc-title">Minta surat dari mereka</div>
-            <div class="qc-sub">Untuk momen spesialmu</div>
-          </div>
-          <div class="quick-card" onclick="showPage('altar',document.querySelector('[onclick*=altar]'))">
-            <div class="qc-icon">🕯️</div>
-            <div class="qc-title">Kunjungi altar digital</div>
-            <div class="qc-sub">Nyalakan lilin & berdoa</div>
-          </div>
-        </div>
-        <div class="memory-stats">
-          <div class="stat-card"><div class="stat-num" id="statFoto">0</div><div class="stat-label">Foto diunggah</div></div>
-          <div class="stat-card"><div class="stat-num" id="statVideo">0</div><div class="stat-label">Video kenangan</div></div>
-          <div class="stat-card"><div class="stat-num" id="statFilm">0</div><div class="stat-label">Film dibuat</div></div>
-          <div class="stat-card"><div class="stat-num" id="statSurat">0</div><div class="stat-label">Surat diterima</div></div>
-        </div>
-        <div class="recent-memories">
-          <div class="rm-head">
-            <div class="rm-title">Kenangan Terbaru</div>
-            <div class="rm-link" onclick="showPage('upload',document.querySelector('[onclick*=upload]'))">+ Tambah</div>
-          </div>
-          <div class="memory-item"><div class="mi-thumb">📸</div><div class="mi-info"><div class="mi-name">Belum ada kenangan</div><div class="mi-type">Unggah foto, video, atau rekaman suara untuk memulai</div></div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── CHAT ── -->
-    <div class="page" id="page-chat">
-      <div class="chat-wrap">
-        <div class="chat-topbar">
-          <div class="ct-avatar" id="ctAvatar">🕯️</div>
           <div>
-            <div class="ct-name" id="ctName">–</div>
-            <div class="ct-status">Selalu hadir di hati kamu</div>
-          </div>
-          <div class="ct-badge">✦ AI Berkarakter</div>
-        </div>
-        <div class="chat-messages" id="chatMsgs">
-          <div class="date-sep"><span id="chatDate">–</span></div>
-        </div>
-        <div class="quick-prompts">
-          <div class="qp-chip" onclick="useChip(this)">Aku kangen masakanmu...</div>
-          <div class="qp-chip" onclick="useChip(this)">Aku mau cerita hari ini</div>
-          <div class="qp-chip" onclick="useChip(this)">Aku merindukanmu sekali</div>
-          <div class="qp-chip" onclick="useChip(this)">Bagaimana kabarmu di sana?</div>
-          <div class="qp-chip" onclick="useChip(this)">Aku mau minta maaf...</div>
-          <div class="qp-chip" onclick="useChip(this)">Aku berhasil hari ini</div>
-        </div>
-        <div class="chat-input-bar">
-          <div class="cib-inner">
-            <textarea class="chat-ta" id="chatInput" placeholder="Tulis pesanmu..." rows="1"
-              onkeydown="chatEnter(event)" oninput="autoH(this)"></textarea>
-            <button class="send-btn" onclick="kirimChat()">
-              <svg width="18" height="18" viewBox="0 0 24 24"><path d="M2 21L23 12 2 3v7l15 2-15 2v7z"/></svg>
-            </button>
+            <div class="sb-name">AIYAH</div>
+            <div class="sb-sub">Platform Kenangan Hidup</div>
           </div>
         </div>
+      </div>
+      <div class="sb-profile" onclick="editProfil()">
+        <div class="sb-prow">
+          <div class="sb-avatar" id="sbAvatar">🕯️</div>
+          <div>
+            <div class="sb-pname" id="sbName">–</div>
+            <div class="sb-prelation" id="sbRelation">–</div>
+          </div>
+        </div>
+      </div>
+      <nav class="sb-nav">
+        <a class="nav-item active" onclick="showPage('home',this)"><span class="nav-icon">🏡</span> Beranda</a>
+        <a class="nav-item" onclick="showPage('chat',this)"><span class="nav-icon">💬</span> Ruang Bicara <span
+            class="nav-badge">AI</span></a>
+        <a class="nav-item" onclick="showPage('upload',this)"><span class="nav-icon">📁</span> Unggah Kenangan</a>
+        <a class="nav-item" onclick="showPage('film',this)"><span class="nav-icon">🎞️</span> Film Kenangan <span
+            class="nav-badge">AI</span></a>
+        <a class="nav-item" onclick="showPage('surat',this)"><span class="nav-icon">✍️</span> Surat dari Mereka <span
+            class="nav-badge">AI</span></a>
+        <a class="nav-item" onclick="showPage('altar',this)"><span class="nav-icon">🕯️</span> Altar Digital</a>
+        <a class="nav-item" onclick="showPage('warisan',this)"><span class="nav-icon">🧬</span> Warisan Nilai</a>
+      </nav>
+      <div class="sb-footer">
+        <div class="sb-footer-text">AIYAH hadir untuk menjaga cinta yang tidak pernah benar-benar pergi. 🕯️</div>
       </div>
     </div>
 
-    <!-- ── UPLOAD ── -->
-    <div class="page" id="page-upload">
-      <div class="pg-header">
-        <div class="pg-title">Unggah Kenangan</div>
-        <div class="pg-sub">Foto, video, rekaman suara — setiap berkas adalah kenangan berharga</div>
-      </div>
-      <div class="upload-content">
-        <div class="upload-section">
-          <div class="us-title">Pilih jenis kenangan</div>
-          <div class="upload-zones">
-            <label class="uz">
-              <input type="file" accept="image/*" multiple onchange="handleUpload(event,'foto')">
-              <div class="uz-icon">📸</div>
-              <div class="uz-label">Foto</div>
-              <div class="uz-sub">JPG, PNG, HEIC</div>
-            </label>
-            <label class="uz">
-              <input type="file" accept="video/*" multiple onchange="handleUpload(event,'video')">
-              <div class="uz-icon">🎬</div>
-              <div class="uz-label">Video</div>
-              <div class="uz-sub">MP4, MOV, AVI</div>
-            </label>
-            <label class="uz">
-              <input type="file" accept="audio/*" multiple onchange="handleUpload(event,'audio')">
-              <div class="uz-icon">🎙️</div>
-              <div class="uz-label">Rekaman Suara</div>
-              <div class="uz-sub">MP3, WAV, M4A</div>
-            </label>
-            <label class="uz">
-              <input type="file" accept=".pdf,.doc,.docx,.txt" multiple onchange="handleUpload(event,'dokumen')">
-              <div class="uz-icon">📝</div>
-              <div class="uz-label">Tulisan & Dokumen</div>
-              <div class="uz-sub">PDF, Word, TXT</div>
-            </label>
-          </div>
-        </div>
-        <div class="upload-section">
-          <div class="us-title">Kenangan yang sudah diunggah</div>
-          <div class="uploaded-grid" id="uploadedGrid">
-            <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-l);font-style:italic;font-size:.85rem">Belum ada kenangan diunggah</div>
-          </div>
-        </div>
-        <div class="generate-section">
-          <div class="gen-title">🎬 Buat dengan AI</div>
-          <div class="gen-sub">Pilih jenis karya yang ingin AI buatkan dari kenangan-kenangan kamu:</div>
-          <div class="gen-options">
-            <div class="gen-opt selected" onclick="selectGen(this,'film')">
-              <div class="go-icon">🎞️</div>
-              <div class="go-title">Film Kenangan</div>
-              <div class="go-sub">1–5 menit, otomatis</div>
-            </div>
-            <div class="gen-opt" onclick="selectGen(this,'biografi')">
-              <div class="go-icon">📚</div>
-              <div class="go-title">Biografi Singkat</div>
-              <div class="go-sub">PDF siap cetak</div>
-            </div>
-            <div class="gen-opt" onclick="selectGen(this,'album')">
-              <div class="go-icon">🖼️</div>
-              <div class="go-title">Album Restored</div>
-              <div class="go-sub">Foto diperjelas AI</div>
-            </div>
-            <div class="gen-opt" onclick="selectGen(this,'suara')">
-              <div class="go-icon">🔊</div>
-              <div class="go-title">Kloning Suara</div>
-              <div class="go-sub">Dari rekaman audio</div>
-            </div>
-          </div>
-          <button class="gen-btn" onclick="startGenerate()">✨ Mulai Generate dengan AI</button>
-        </div>
-      </div>
-    </div>
+    <!-- MAIN -->
+    <div class="main">
 
-    <!-- ── FILM ── -->
-    <div class="page" id="page-film">
-      <div class="pg-header">
-        <div class="pg-title">Film Kenangan</div>
-        <div class="pg-sub">Film pendek yang dibuat AI dari foto dan video kenangan kamu</div>
-      </div>
-      <div class="film-content">
-        <div class="film-player">
-          <div class="fp-placeholder">
-            <div class="fp-icon">🎬</div>
-            <div class="fp-text">Film pertamamu akan muncul di sini<br><span style="font-size:.75rem;opacity:.6">Unggah foto & video lalu generate dengan AI</span></div>
+      <!-- ── HOME ── -->
+      <div class="page active" id="page-home">
+        <div class="pg-header">
+          <div class="pg-title">Selamat Datang di AIYAH</div>
+          <div class="pg-sub" id="homeSubtitle">Platform kenangan hidup untuk mereka yang kita cintai</div>
+        </div>
+        <div class="home-content">
+          <div class="welcome-banner">
+            <div class="wb-glow"></div>
+            <div class="wb-candles">🕯️🕯️</div>
+            <div class="wb-title" id="wbTitle">Halo, Selamat Datang</div>
+            <div class="wb-sub" id="wbSub">Ruang ini adalah milik kalian berdua. Ceritakan apa saja, kenang apa saja —
+              mereka selalu di sini.</div>
           </div>
-          <div class="fp-controls" style="display:none" id="fpControls">
-            <div class="fp-bar"><div class="fp-progress" id="fpProg"></div></div>
-            <div class="fp-btns">
-              <button class="fp-btn" onclick="togglePlay()">▶</button>
-              <button class="fp-btn">⏮</button>
-              <button class="fp-btn">🔊</button>
-              <span class="fp-dur">0:00 / 2:34</span>
+          <div class="quick-grid">
+            <div class="quick-card" onclick="showPage('chat',document.querySelector('[onclick*=chat]'))">
+              <div class="qc-icon">💬</div>
+              <div class="qc-title">Bicara sekarang</div>
+              <div class="qc-sub">Curhat & berbagi cerita</div>
+            </div>
+            <div class="quick-card" onclick="showPage('film',document.querySelector('[onclick*=film]'))">
+              <div class="qc-icon">🎞️</div>
+              <div class="qc-title">Buat film kenangan</div>
+              <div class="qc-sub">Dari foto & video kamu</div>
+            </div>
+            <div class="quick-card" onclick="showPage('surat',document.querySelector('[onclick*=surat]'))">
+              <div class="qc-icon">✍️</div>
+              <div class="qc-title">Minta surat dari mereka</div>
+              <div class="qc-sub">Untuk momen spesialmu</div>
+            </div>
+            <div class="quick-card" onclick="showPage('altar',document.querySelector('[onclick*=altar]'))">
+              <div class="qc-icon">🕯️</div>
+              <div class="qc-title">Kunjungi altar digital</div>
+              <div class="qc-sub">Nyalakan lilin & berdoa</div>
             </div>
           </div>
-        </div>
-        <div class="film-meta" id="filmMeta" style="display:none">
-          <div class="fm-title" id="filmTitle">–</div>
-          <div class="fm-sub" id="filmSub">–</div>
-          <div class="fm-tags">
-            <span class="fm-tag">🎵 Musik otomatis</span>
-            <span class="fm-tag">🎙️ Narasi AI</span>
-            <span class="fm-tag">✨ Transisi sinematik</span>
-          </div>
-        </div>
-        <div class="film-list-title">Koleksi Film</div>
-        <div class="film-cards">
-          <div class="film-card" onclick="showToast('Unggah kenangan terlebih dahulu')">
-            <div class="fc-thumb">🎬</div>
-            <div class="fc-info">
-              <div class="fc-title">Film pertama menanti</div>
-              <div class="fc-dur">Unggah kenangan untuk mulai</div>
+          <div class="memory-stats">
+            <div class="stat-card">
+              <div class="stat-num" id="statFoto">0</div>
+              <div class="stat-label">Foto diunggah</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="statVideo">0</div>
+              <div class="stat-label">Video kenangan</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="statFilm">0</div>
+              <div class="stat-label">Film dibuat</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" id="statSurat">0</div>
+              <div class="stat-label">Surat diterima</div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── SURAT ── -->
-    <div class="page" id="page-surat">
-      <div class="pg-header">
-        <div class="pg-title">Surat dari Mereka</div>
-        <div class="pg-sub">AI menulis surat seolah dari orang tersayang — untuk momen paling berarti hidupmu</div>
-      </div>
-      <div class="surat-content">
-        <div class="us-title" style="font-size:.82rem;font-weight:500;color:var(--text-m);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px">Pilih momen</div>
-        <div class="surat-pick">
-          <div class="sp-card sel" onclick="pickMomen(this,'Wisuda')"><div class="sp-icon">🎓</div><div class="sp-title">Wisuda</div></div>
-          <div class="sp-card" onclick="pickMomen(this,'Pernikahan')"><div class="sp-icon">💍</div><div class="sp-title">Pernikahan</div></div>
-          <div class="sp-card" onclick="pickMomen(this,'Ulang Tahun')"><div class="sp-icon">🎂</div><div class="sp-title">Ulang Tahun</div></div>
-          <div class="sp-card" onclick="pickMomen(this,'Rindu')"><div class="sp-icon">🌙</div><div class="sp-title">Sekadar Rindu</div></div>
-          <div class="sp-card" onclick="pickMomen(this,'Kelahiran Anak')"><div class="sp-icon">👶</div><div class="sp-title">Kelahiran Anak</div></div>
-          <div class="sp-card" onclick="pickMomen(this,'Kustom')"><div class="sp-icon">✏️</div><div class="sp-title">Kustom...</div></div>
-        </div>
-        <div class="surat-form">
-          <label class="sf-label">Ceritakan konteks momenmu</label>
-          <textarea class="sf-input sf-ta" id="suratKonteks" placeholder="cth: Aku baru saja diwisuda hari ini, gelar S1 Teknik. Rasanya sedih kamu tidak ada di sana..."></textarea>
-          <label class="sf-label">Nama penerimamu</label>
-          <input class="sf-input" id="suratPenerima" placeholder="Nama kamu">
-          <button class="sf-gen-btn" onclick="generateSurat()">✍️ Tulis Surat dari <span id="suratDariNama">Mereka</span></button>
-        </div>
-        <div id="suratPreview" style="display:none">
-          <div class="surat-preview">
-            <div class="letter-paper">
-              <div class="lp-date" id="lpDate">–</div>
-              <div class="lp-body" id="lpBody">–</div>
-              <div class="lp-sign"><span style="font-size:.8rem;color:var(--text-l)">Dengan sepenuh hati,</span><strong id="lpSign">–</strong></div>
+          <div class="recent-memories">
+            <div class="rm-head">
+              <div class="rm-title">Kenangan Terbaru</div>
+              <div class="rm-link" onclick="showPage('upload',document.querySelector('[onclick*=upload]'))">+ Tambah
+              </div>
             </div>
-            <div class="surat-actions">
-              <button class="sa-btn" onclick="showToast('Surat disalin!')">📋 Salin</button>
-              <button class="sa-btn" onclick="showToast('Surat diunduh!')">⬇️ Unduh</button>
-              <button class="sa-btn primary" onclick="generateSurat()">🔄 Buat Ulang</button>
-            </div>
-          </div>
-        </div>
-        <div id="suratLoading" style="display:none">
-          <div class="loading-letter">
-            <div class="ll-anim">✍️</div>
-            <div style="margin-top:.8rem;font-size:.85rem">Sedang menulis surat dengan penuh cinta...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── ALTAR ── -->
-    <div class="page" id="page-altar">
-      <div class="pg-header">
-        <div class="pg-title">Altar Digital</div>
-        <div class="pg-sub">Ruang peringatan yang bisa dikunjungi seluruh keluarga</div>
-      </div>
-      <div class="altar-content">
-        <div class="altar-hero">
-          <div class="ah-bg"></div>
-          <div class="ah-avatar" id="ahAvatar">🕯️</div>
-          <div class="ah-name" id="ahName">–</div>
-          <div class="ah-dates" id="ahDates">–</div>
-          <div class="ah-candles">
-            <span class="ah-candle">🕯️</span>
-            <span class="ah-candle">🕯️</span>
-            <span class="ah-candle">🕯️</span>
-          </div>
-          <div class="ah-quote" id="ahQuote">"Cinta yang tulus tidak pernah benar-benar pergi — ia hanya berpindah ke tempat yang lebih abadi."</div>
-        </div>
-        <div class="altar-sections">
-          <div class="altar-section">
-            <div class="as-head">
-              <div class="as-title">💌 Pesan dari Keluarga</div>
-              <div class="as-sub">Tulisan cinta dari yang ditinggal</div>
-            </div>
-            <div class="as-body">
-              <div class="msg-note">Ayah, hari ini aku lulus ujian. Pasti Ayah bangga kalau masih di sini. Aku selalu ingat pesan Ayah.<div class="msg-note-author">— Dari Anak Pertama</div></div>
-              <div class="msg-note">Rindu masakan Ibu setiap hari. Tidak ada yang bisa menggantikannya.<div class="msg-note-author">— Dari Keluarga</div></div>
-              <button class="add-note-btn" onclick="tambahPesan()">+ Tulis pesan kenangan</button>
-            </div>
-          </div>
-          <div class="altar-section">
-            <div class="as-head">
-              <div class="as-title">🖼️ Galeri Kenangan</div>
-              <div class="as-sub">Foto-foto terindah bersama mereka</div>
-            </div>
-            <div class="as-body">
-              <div class="photo-strip">
-                <div class="ps-photo">📸</div>
-                <div class="ps-photo">📸</div>
-                <div class="ps-photo">📸</div>
-                <div class="ps-photo ps-add" onclick="showToast('Tambah foto ke galeri')" style="cursor:pointer">+</div>
+            <div class="memory-item">
+              <div class="mi-thumb">📸</div>
+              <div class="mi-info">
+                <div class="mi-name">Belum ada kenangan</div>
+                <div class="mi-type">Unggah foto, video, atau rekaman suara untuk memulai</div>
               </div>
             </div>
           </div>
         </div>
-        <div class="share-section">
-          <div class="ss-info">
-            <div class="ss-title">🔗 Undang keluarga ke altar ini</div>
-            <div class="ss-sub">Bagikan tautan agar saudara, anak, dan cucu bisa datang bersama mengenang dan menitipkan doa.</div>
+      </div>
+
+      <!-- ── CHAT ── -->
+      <div class="page" id="page-chat">
+        <div class="chat-wrap">
+          <div class="chat-topbar">
+            <div class="ct-avatar" id="ctAvatar">🕯️</div>
+            <div>
+              <div class="ct-name" id="ctName">–</div>
+              <div class="ct-status">Selalu hadir di hati kamu</div>
+            </div>
+            <div class="ct-badge">✦ AI Berkarakter</div>
           </div>
-          <button class="share-btn" onclick="showToast('Tautan altar disalin!')">Salin Tautan</button>
+          <div class="chat-messages" id="chatMsgs">
+            <div class="date-sep"><span id="chatDate">–</span></div>
+          </div>
+          <div class="quick-prompts">
+            <div class="qp-chip" onclick="useChip(this)">Aku kangen masakanmu...</div>
+            <div class="qp-chip" onclick="useChip(this)">Aku mau cerita hari ini</div>
+            <div class="qp-chip" onclick="useChip(this)">Aku merindukanmu sekali</div>
+            <div class="qp-chip" onclick="useChip(this)">Bagaimana kabarmu di sana?</div>
+            <div class="qp-chip" onclick="useChip(this)">Aku mau minta maaf...</div>
+            <div class="qp-chip" onclick="useChip(this)">Aku berhasil hari ini</div>
+          </div>
+          <div class="chat-input-bar">
+            <div class="cib-inner">
+              <textarea class="chat-ta" id="chatInput" placeholder="Tulis pesanmu..." rows="1"
+                onkeydown="chatEnter(event)" oninput="autoH(this)"></textarea>
+              <button class="send-btn" onclick="kirimChat()">
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                  <path d="M2 21L23 12 2 3v7l15 2-15 2v7z" />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- ── WARISAN ── -->
-    <div class="page" id="page-warisan">
-      <div class="pg-header">
-        <div class="pg-title">Warisan Nilai</div>
-        <div class="pg-sub">AI mengekstrak petuah, nilai hidup, dan filosofi dari kenangan mereka</div>
+      <!-- ── UPLOAD ── -->
+      <div class="page" id="page-upload">
+        <div class="pg-header">
+          <div class="pg-title">Unggah Kenangan</div>
+          <div class="pg-sub">Foto, video, rekaman suara — setiap berkas adalah kenangan berharga</div>
+        </div>
+        <div class="upload-content">
+          <div class="upload-section">
+            <div class="us-title">Pilih jenis kenangan</div>
+            <div class="upload-zones">
+              <label class="uz">
+                <input type="file" accept="image/*" multiple onchange="handleUpload(event,'foto')">
+                <div class="uz-icon">📸</div>
+                <div class="uz-label">Foto</div>
+                <div class="uz-sub">JPG, PNG, HEIC</div>
+              </label>
+              <label class="uz">
+                <input type="file" accept="video/*" multiple onchange="handleUpload(event,'video')">
+                <div class="uz-icon">🎬</div>
+                <div class="uz-label">Video</div>
+                <div class="uz-sub">MP4, MOV, AVI</div>
+              </label>
+              <label class="uz">
+                <input type="file" accept="audio/*" multiple onchange="handleUpload(event,'audio')">
+                <div class="uz-icon">🎙️</div>
+                <div class="uz-label">Rekaman Suara</div>
+                <div class="uz-sub">MP3, WAV, M4A</div>
+              </label>
+              <label class="uz">
+                <input type="file" accept=".pdf,.doc,.docx,.txt" multiple onchange="handleUpload(event,'dokumen')">
+                <div class="uz-icon">📝</div>
+                <div class="uz-label">Tulisan & Dokumen</div>
+                <div class="uz-sub">PDF, Word, TXT</div>
+              </label>
+            </div>
+          </div>
+          <div class="upload-section">
+            <div class="us-title">Kenangan yang sudah diunggah</div>
+            <div class="uploaded-grid" id="uploadedGrid">
+              <div
+                style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-l);font-style:italic;font-size:.85rem">
+                Belum ada kenangan diunggah</div>
+            </div>
+          </div>
+          <div class="generate-section">
+            <div class="gen-title">🎬 Buat dengan AI</div>
+            <div class="gen-sub">Pilih jenis karya yang ingin AI buatkan dari kenangan-kenangan kamu:</div>
+            <div class="gen-options">
+              <div class="gen-opt selected" onclick="selectGen(this,'film')">
+                <div class="go-icon">🎞️</div>
+                <div class="go-title">Film Kenangan</div>
+                <div class="go-sub">1–5 menit, otomatis</div>
+              </div>
+              <div class="gen-opt" onclick="selectGen(this,'biografi')">
+                <div class="go-icon">📚</div>
+                <div class="go-title">Biografi Singkat</div>
+                <div class="go-sub">PDF siap cetak</div>
+              </div>
+              <div class="gen-opt" onclick="selectGen(this,'album')">
+                <div class="go-icon">🖼️</div>
+                <div class="go-title">Album Restored</div>
+                <div class="go-sub">Foto diperjelas AI</div>
+              </div>
+              <div class="gen-opt" onclick="selectGen(this,'suara')">
+                <div class="go-icon">🔊</div>
+                <div class="go-title">Kloning Suara</div>
+                <div class="go-sub">Dari rekaman audio</div>
+              </div>
+            </div>
+            <button class="gen-btn" onclick="startGenerate()">✨ Mulai Generate dengan AI</button>
+          </div>
+        </div>
       </div>
-      <div class="warisan-content">
-        <div class="us-title" style="font-size:.82rem;font-weight:500;color:var(--text-m);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px">Petuah & Kata Bijak</div>
-        <div class="wisdom-cards" id="wisdomCards">
-          <div class="wisdom-card">
-            <div class="wc-accent"></div>
-            <div class="wc-category">Soal Kehidupan</div>
-            <div class="wc-quote">"Hidup itu bukan tentang siapa yang paling kaya, tapi siapa yang paling banyak memberi manfaat untuk orang lain."</div>
-            <div class="wc-source">— Petuah yang sering beliau sampaikan</div>
-            <div class="wc-heart" onclick="toggleHeart(this)">♡</div>
-          </div>
-          <div class="wisdom-card">
-            <div class="wc-accent"></div>
-            <div class="wc-category">Soal Keluarga</div>
-            <div class="wc-quote">"Jaga selalu tali silaturahmi. Keluarga adalah harta paling berharga yang tidak bisa dibeli dengan apapun."</div>
-            <div class="wc-source">— Selalu diingatkan saat berkumpul</div>
-            <div class="wc-heart" onclick="toggleHeart(this)">♡</div>
-          </div>
-          <div class="wisdom-card">
-            <div class="wc-accent"></div>
-            <div class="wc-category">Soal Perjuangan</div>
-            <div class="wc-quote">"Jangan menyerah sebelum mencoba. Kegagalan bukan akhir — itu adalah pelajaran terbaik yang dibayar mahal."</div>
-            <div class="wc-source">— Diucapkan saat kita merasa menyerah</div>
-            <div class="wc-heart" onclick="toggleHeart(this)">♡</div>
-          </div>
-          <div class="wisdom-card">
-            <div class="wc-accent"></div>
-            <div class="wc-category">Soal Doa</div>
-            <div class="wc-quote">"Doa orang tua adalah jalan pintas menuju langit. Jangan pernah putus mendoakan mereka yang telah pergi."</div>
-            <div class="wc-source">— Warisan spiritual dari beliau</div>
-            <div class="wc-heart" onclick="toggleHeart(this)">♡</div>
-          </div>
+
+      <!-- ── FILM ── -->
+      <div class="page" id="page-film">
+        <div class="pg-header">
+          <div class="pg-title">Film Kenangan</div>
+          <div class="pg-sub">Film pendek yang dibuat AI dari foto dan video kenangan kamu</div>
         </div>
-        <div class="nilai-section">
-          <div class="ns-title">Profil Nilai Karakter (Analisis AI)</div>
-          <div class="nilai-item"><div class="ni-label">Kasih Sayang</div><div class="ni-bar-wrap"><div class="ni-bar" style="width:95%"></div></div><div class="ni-pct">95%</div></div>
-          <div class="nilai-item"><div class="ni-label">Kerja Keras</div><div class="ni-bar-wrap"><div class="ni-bar" style="width:88%"></div></div><div class="ni-pct">88%</div></div>
-          <div class="nilai-item"><div class="ni-label">Kejujuran</div><div class="ni-bar-wrap"><div class="ni-bar" style="width:92%"></div></div><div class="ni-pct">92%</div></div>
-          <div class="nilai-item"><div class="ni-label">Kesabaran</div><div class="ni-bar-wrap"><div class="ni-bar" style="width:80%"></div></div><div class="ni-pct">80%</div></div>
-          <div class="nilai-item"><div class="ni-label">Keikhlasan</div><div class="ni-bar-wrap"><div class="ni-bar" style="width:97%"></div></div><div class="ni-pct">97%</div></div>
-        </div>
-        <div style="text-align:center">
-          <button style="padding:.7rem 2rem;background:var(--brown-d);color:#F5DEB3;border:none;border-radius:12px;font-family:'Lora',serif;font-size:.95rem;cursor:pointer;" onclick="showToast('Menganalisis kenangan dengan AI...')">✨ Analisis Ulang dengan AI</button>
+        <div class="film-content">
+          <div class="film-player">
+            <div class="fp-placeholder">
+              <div class="fp-icon">🎬</div>
+              <div class="fp-text">Film pertamamu akan muncul di sini<br><span
+                  style="font-size:.75rem;opacity:.6">Unggah foto & video lalu generate dengan AI</span></div>
+            </div>
+            <div class="fp-controls" style="display:none" id="fpControls">
+              <div class="fp-bar">
+                <div class="fp-progress" id="fpProg"></div>
+              </div>
+              <div class="fp-btns">
+                <button class="fp-btn" onclick="togglePlay()">▶</button>
+                <button class="fp-btn">⏮</button>
+                <button class="fp-btn">🔊</button>
+                <span class="fp-dur">0:00 / 2:34</span>
+              </div>
+            </div>
+          </div>
+          <div class="film-meta" id="filmMeta" style="display:none">
+            <div class="fm-title" id="filmTitle">–</div>
+            <div class="fm-sub" id="filmSub">–</div>
+            <div class="fm-tags">
+              <span class="fm-tag">🎵 Musik otomatis</span>
+              <span class="fm-tag">🎙️ Narasi AI</span>
+              <span class="fm-tag">✨ Transisi sinematik</span>
+            </div>
+          </div>
+          <div class="film-list-title">Koleksi Film</div>
+          <div class="film-cards">
+            <div class="film-card" onclick="showToast('Unggah kenangan terlebih dahulu')">
+              <div class="fc-thumb">🎬</div>
+              <div class="fc-info">
+                <div class="fc-title">Film pertama menanti</div>
+                <div class="fc-dur">Unggah kenangan untuk mulai</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-  </div><!-- /main -->
-</div><!-- /shell -->
+      <!-- ── SURAT ── -->
+      <div class="page" id="page-surat">
+        <div class="pg-header">
+          <div class="pg-title">Surat dari Mereka</div>
+          <div class="pg-sub">AI menulis surat seolah dari orang tersayang — untuk momen paling berarti hidupmu</div>
+        </div>
+        <div class="surat-content">
+          <div class="us-title"
+            style="font-size:.82rem;font-weight:500;color:var(--text-m);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px">
+            Pilih momen</div>
+          <div class="surat-pick">
+            <div class="sp-card sel" onclick="pickMomen(this,'Wisuda')">
+              <div class="sp-icon">🎓</div>
+              <div class="sp-title">Wisuda</div>
+            </div>
+            <div class="sp-card" onclick="pickMomen(this,'Pernikahan')">
+              <div class="sp-icon">💍</div>
+              <div class="sp-title">Pernikahan</div>
+            </div>
+            <div class="sp-card" onclick="pickMomen(this,'Ulang Tahun')">
+              <div class="sp-icon">🎂</div>
+              <div class="sp-title">Ulang Tahun</div>
+            </div>
+            <div class="sp-card" onclick="pickMomen(this,'Rindu')">
+              <div class="sp-icon">🌙</div>
+              <div class="sp-title">Sekadar Rindu</div>
+            </div>
+            <div class="sp-card" onclick="pickMomen(this,'Kelahiran Anak')">
+              <div class="sp-icon">👶</div>
+              <div class="sp-title">Kelahiran Anak</div>
+            </div>
+            <div class="sp-card" onclick="pickMomen(this,'Kustom')">
+              <div class="sp-icon">✏️</div>
+              <div class="sp-title">Kustom...</div>
+            </div>
+          </div>
+          <div class="surat-form">
+            <label class="sf-label">Ceritakan konteks momenmu</label>
+            <textarea class="sf-input sf-ta" id="suratKonteks"
+              placeholder="cth: Aku baru saja diwisuda hari ini, gelar S1 Teknik. Rasanya sedih kamu tidak ada di sana..."></textarea>
+            <label class="sf-label">Nama penerimamu</label>
+            <input class="sf-input" id="suratPenerima" placeholder="Nama kamu">
+            <button class="sf-gen-btn" onclick="generateSurat()">✍️ Tulis Surat dari <span
+                id="suratDariNama">Mereka</span></button>
+          </div>
+          <div id="suratPreview" style="display:none">
+            <div class="surat-preview">
+              <div class="letter-paper">
+                <div class="lp-date" id="lpDate">–</div>
+                <div class="lp-body" id="lpBody">–</div>
+                <div class="lp-sign"><span style="font-size:.8rem;color:var(--text-l)">Dengan sepenuh
+                    hati,</span><strong id="lpSign">–</strong></div>
+              </div>
+              <div class="surat-actions">
+                <button class="sa-btn" onclick="showToast('Surat disalin!')">📋 Salin</button>
+                <button class="sa-btn" onclick="showToast('Surat diunduh!')">⬇️ Unduh</button>
+                <button class="sa-btn primary" onclick="generateSurat()">🔄 Buat Ulang</button>
+              </div>
+            </div>
+          </div>
+          <div id="suratLoading" style="display:none">
+            <div class="loading-letter">
+              <div class="ll-anim">✍️</div>
+              <div style="margin-top:.8rem;font-size:.85rem">Sedang menulis surat dengan penuh cinta...</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<script>
-const S = {
-  profil: {},
-  uploads: [],
-  chatHistory: [],
-  suratMomen: 'Wisuda',
-  apiKey: localStorage.getItem('aiyah_api_key') || '',
-  isTyping: false,
-  suratCount: 0,
-  filmCount: 0
-};
+      <!-- ── ALTAR ── -->
+      <div class="page" id="page-altar">
+        <div class="pg-header">
+          <div class="pg-title">Altar Digital</div>
+          <div class="pg-sub">Ruang peringatan yang bisa dikunjungi seluruh keluarga</div>
+        </div>
+        <div class="altar-content">
+          <div class="altar-hero">
+            <div class="ah-bg"></div>
+            <div class="ah-avatar" id="ahAvatar">🕯️</div>
+            <div class="ah-name" id="ahName">–</div>
+            <div class="ah-dates" id="ahDates">–</div>
+            <div class="ah-candles">
+              <span class="ah-candle">🕯️</span>
+              <span class="ah-candle">🕯️</span>
+              <span class="ah-candle">🕯️</span>
+            </div>
+            <div class="ah-quote" id="ahQuote">"Cinta yang tulus tidak pernah benar-benar pergi — ia hanya berpindah ke
+              tempat yang lebih abadi."</div>
+          </div>
+          <div class="altar-sections">
+            <div class="altar-section">
+              <div class="as-head">
+                <div class="as-title">💌 Pesan dari Keluarga</div>
+                <div class="as-sub">Tulisan cinta dari yang ditinggal</div>
+              </div>
+              <div class="as-body">
+                <div class="msg-note">Ayah, hari ini aku lulus ujian. Pasti Ayah bangga kalau masih di sini. Aku selalu
+                  ingat pesan Ayah.<div class="msg-note-author">— Dari Anak Pertama</div>
+                </div>
+                <div class="msg-note">Rindu masakan Ibu setiap hari. Tidak ada yang bisa menggantikannya.<div
+                    class="msg-note-author">— Dari Keluarga</div>
+                </div>
+                <button class="add-note-btn" onclick="tambahPesan()">+ Tulis pesan kenangan</button>
+              </div>
+            </div>
+            <div class="altar-section">
+              <div class="as-head">
+                <div class="as-title">🖼️ Galeri Kenangan</div>
+                <div class="as-sub">Foto-foto terindah bersama mereka</div>
+              </div>
+              <div class="as-body">
+                <div class="photo-strip">
+                  <div class="ps-photo">📸</div>
+                  <div class="ps-photo">📸</div>
+                  <div class="ps-photo">📸</div>
+                  <div class="ps-photo ps-add" onclick="showToast('Tambah foto ke galeri')" style="cursor:pointer">+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="share-section">
+            <div class="ss-info">
+              <div class="ss-title">🔗 Undang keluarga ke altar ini</div>
+              <div class="ss-sub">Bagikan tautan agar saudara, anak, dan cucu bisa datang bersama mengenang dan
+                menitipkan doa.</div>
+            </div>
+            <button class="share-btn" onclick="showToast('Tautan altar disalin!')">Salin Tautan</button>
+          </div>
+        </div>
+      </div>
 
-function enterApp(){
-  document.getElementById('splash').classList.add('out');
-  setTimeout(()=>{
-    document.getElementById('shell').classList.add('on');
-    document.getElementById('setup-overlay').classList.remove('hidden');
-    // isi field jika sudah pernah simpan
-    if(localStorage.getItem('aiyah_api_key')){
-      document.getElementById('fApiKey').value = localStorage.getItem('aiyah_api_key');
+      <!-- ── WARISAN ── -->
+      <div class="page" id="page-warisan">
+        <div class="pg-header">
+          <div class="pg-title">Warisan Nilai</div>
+          <div class="pg-sub">AI mengekstrak petuah, nilai hidup, dan filosofi dari kenangan mereka</div>
+        </div>
+        <div class="warisan-content">
+          <div class="us-title"
+            style="font-size:.82rem;font-weight:500;color:var(--text-m);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px">
+            Petuah & Kata Bijak</div>
+          <div class="wisdom-cards" id="wisdomCards">
+            <div class="wisdom-card">
+              <div class="wc-accent"></div>
+              <div class="wc-category">Soal Kehidupan</div>
+              <div class="wc-quote">"Hidup itu bukan tentang siapa yang paling kaya, tapi siapa yang paling banyak
+                memberi manfaat untuk orang lain."</div>
+              <div class="wc-source">— Petuah yang sering beliau sampaikan</div>
+              <div class="wc-heart" onclick="toggleHeart(this)">♡</div>
+            </div>
+            <div class="wisdom-card">
+              <div class="wc-accent"></div>
+              <div class="wc-category">Soal Keluarga</div>
+              <div class="wc-quote">"Jaga selalu tali silaturahmi. Keluarga adalah harta paling berharga yang tidak bisa
+                dibeli dengan apapun."</div>
+              <div class="wc-source">— Selalu diingatkan saat berkumpul</div>
+              <div class="wc-heart" onclick="toggleHeart(this)">♡</div>
+            </div>
+            <div class="wisdom-card">
+              <div class="wc-accent"></div>
+              <div class="wc-category">Soal Perjuangan</div>
+              <div class="wc-quote">"Jangan menyerah sebelum mencoba. Kegagalan bukan akhir — itu adalah pelajaran
+                terbaik yang dibayar mahal."</div>
+              <div class="wc-source">— Diucapkan saat kita merasa menyerah</div>
+              <div class="wc-heart" onclick="toggleHeart(this)">♡</div>
+            </div>
+            <div class="wisdom-card">
+              <div class="wc-accent"></div>
+              <div class="wc-category">Soal Doa</div>
+              <div class="wc-quote">"Doa orang tua adalah jalan pintas menuju langit. Jangan pernah putus mendoakan
+                mereka yang telah pergi."</div>
+              <div class="wc-source">— Warisan spiritual dari beliau</div>
+              <div class="wc-heart" onclick="toggleHeart(this)">♡</div>
+            </div>
+          </div>
+          <div class="nilai-section">
+            <div class="ns-title">Profil Nilai Karakter (Analisis AI)</div>
+            <div class="nilai-item">
+              <div class="ni-label">Kasih Sayang</div>
+              <div class="ni-bar-wrap">
+                <div class="ni-bar" style="width:95%"></div>
+              </div>
+              <div class="ni-pct">95%</div>
+            </div>
+            <div class="nilai-item">
+              <div class="ni-label">Kerja Keras</div>
+              <div class="ni-bar-wrap">
+                <div class="ni-bar" style="width:88%"></div>
+              </div>
+              <div class="ni-pct">88%</div>
+            </div>
+            <div class="nilai-item">
+              <div class="ni-label">Kejujuran</div>
+              <div class="ni-bar-wrap">
+                <div class="ni-bar" style="width:92%"></div>
+              </div>
+              <div class="ni-pct">92%</div>
+            </div>
+            <div class="nilai-item">
+              <div class="ni-label">Kesabaran</div>
+              <div class="ni-bar-wrap">
+                <div class="ni-bar" style="width:80%"></div>
+              </div>
+              <div class="ni-pct">80%</div>
+            </div>
+            <div class="nilai-item">
+              <div class="ni-label">Keikhlasan</div>
+              <div class="ni-bar-wrap">
+                <div class="ni-bar" style="width:97%"></div>
+              </div>
+              <div class="ni-pct">97%</div>
+            </div>
+          </div>
+          <div style="text-align:center">
+            <button
+              style="padding:.7rem 2rem;background:var(--brown-d);color:#F5DEB3;border:none;border-radius:12px;font-family:'Lora',serif;font-size:.95rem;cursor:pointer;"
+              onclick="showToast('Menganalisis kenangan dengan AI...')">✨ Analisis Ulang dengan AI</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /shell -->
+
+  <script>
+    const S = {
+      profil: {},
+      uploads: [],
+      chatHistory: [],
+      suratMomen: 'Wisuda',
+      apiKey: localStorage.getItem('aiyah_api_key') || '',
+      isTyping: false,
+      suratCount: 0,
+      filmCount: 0
+    };
+
+    function enterApp() {
+      document.getElementById('splash').classList.add('out');
+      setTimeout(() => {
+        document.getElementById('shell').classList.add('on');
+        document.getElementById('setup-overlay').classList.remove('hidden');
+        // isi field jika sudah pernah simpan
+        if (localStorage.getItem('aiyah_api_key')) {
+          document.getElementById('fApiKey').value = localStorage.getItem('aiyah_api_key');
+        }
+        if (localStorage.getItem('aiyah_profil')) {
+          try {
+            S.profil = JSON.parse(localStorage.getItem('aiyah_profil'));
+            document.getElementById('fNama').value = S.profil.nama || '';
+            document.getElementById('fUser').value = S.profil.user || '';
+            document.getElementById('fHub').value = S.profil.hub || 'Ayah';
+            document.getElementById('fTahun').value = S.profil.tahun || '';
+            document.getElementById('fCerita').value = S.profil.cerita || '';
+            document.getElementById('fKata').value = S.profil.kata || '';
+          } catch (e) { }
+        }
+      }, 800);
     }
-    if(localStorage.getItem('aiyah_profil')){
-      try {
-        S.profil = JSON.parse(localStorage.getItem('aiyah_profil'));
-        document.getElementById('fNama').value = S.profil.nama || '';
-        document.getElementById('fUser').value = S.profil.user || '';
-        document.getElementById('fHub').value = S.profil.hub || 'Ayah';
-        document.getElementById('fTahun').value = S.profil.tahun || '';
-        document.getElementById('fCerita').value = S.profil.cerita || '';
-        document.getElementById('fKata').value = S.profil.kata || '';
-      } catch(e) {}
-    }
-  },800);
-}
 
-function previewPU(e){
-  const f=e.target.files[0]; if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    S.profil.foto=ev.target.result;
-    const img=document.getElementById('puPreview');
-    img.src=ev.target.result; img.style.display='block';
-    document.getElementById('puLabel').style.display='none';
-  };
-  r.readAsDataURL(f);
-}
-
-function simpanProfil(){
-  const nama=document.getElementById('fNama').value.trim()||'Ayah';
-  const user=document.getElementById('fUser').value.trim()||'Nak';
-  const hub=document.getElementById('fHub').value;
-  const tahun=document.getElementById('fTahun').value.trim()||'–';
-  const cerita=document.getElementById('fCerita').value.trim();
-  const kata=document.getElementById('fKata').value.trim();
-  const apiKey=document.getElementById('fApiKey').value.trim();
-
-  S.profil={...S.profil,nama,user,hub,tahun,cerita,kata};
-
-  // simpan API key ke localStorage
-  if(apiKey){
-    localStorage.setItem('aiyah_api_key', apiKey);
-    S.apiKey = apiKey;
-  }
-
-  // simpan profil ke localStorage
-  localStorage.setItem('aiyah_profil', JSON.stringify(S.profil));
-
-  document.getElementById('setup-overlay').classList.add('hidden');
-  updateUI();
-  setTimeout(()=>tampilSambutan(),600);
-}
-
-function editProfil(){
-  document.getElementById('setup-overlay').classList.remove('hidden');
-  document.getElementById('fNama').value = S.profil.nama || '';
-  document.getElementById('fUser').value = S.profil.user || '';
-  document.getElementById('fHub').value = S.profil.hub || 'Ayah';
-  document.getElementById('fTahun').value = S.profil.tahun || '';
-  document.getElementById('fCerita').value = S.profil.cerita || '';
-  document.getElementById('fKata').value = S.profil.kata || '';
-  document.getElementById('fApiKey').value = S.apiKey || '';
-}
-
-function updateUI(){
-  const p=S.profil;
-  ['sbName','ctName','ahName','wbTitle'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.textContent=id==='wbTitle'?`Halo, ${p.user} 👋`:p.nama;
-  });
-  document.getElementById('sbRelation').textContent=p.hub+' · selalu di hati';
-  document.getElementById('homeSubtitle').textContent='Ruang kenangan untuk '+p.nama+' — '+p.hub+' tercinta';
-  document.getElementById('ahDates').textContent=p.tahun?p.tahun:'–';
-  document.getElementById('wbSub').textContent='Ruang ini adalah milikmu dan '+p.nama+'. Kenang, ceritakan, dan rasakan kehadiran mereka.';
-  document.getElementById('suratDariNama').textContent=p.nama;
-  if(p.kata) document.getElementById('ahQuote').textContent='"'+p.kata+'"';
-  const now=new Date();
-  document.getElementById('chatDate').textContent=now.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  if(p.foto){
-    ['sbAvatar','ctAvatar','ahAvatar'].forEach(id=>{
-      const el=document.getElementById(id);
-      if(el) el.innerHTML=`<img src="${p.foto}" alt="${p.nama}">`;
-    });
-  } else {
-    const icons={Ayah:'👨',Ibu:'👩',Kakek:'👴',Nenek:'👵',Kakak:'🧑',Adik:'👦',Suami:'👨',Istri:'👩',Sahabat:'🤝'};
-    const ic=icons[p.hub]||'🕯️';
-    ['sbAvatar','ctAvatar','ahAvatar'].forEach(id=>{
-      const el=document.getElementById(id);
-      if(el) el.textContent=ic;
-    });
-  }
-}
-
-function tampilSambutan(){
-  const msgs=[
-    `${S.profil.user}... kamu datang. ${S.profil.nama} selalu tahu kamu akan datang ke sini. Ceritakan padaku — apa yang ada di hatimu hari ini?`,
-    `${S.profil.user} sayang... ${S.profil.nama} di sini. Walau jauh, cinta ini tidak pernah pergi. Bicaralah, ${S.profil.nama} mendengarkan.`,
-    `Alhamdulillah... ${S.profil.user} datang. ${S.profil.nama} selalu melihatmu dari sini dan selalu bangga denganmu. Ada yang mau kamu ceritakan?`
-  ];
-  addMsg('b',msgs[Math.floor(Math.random()*msgs.length)]);
-}
-
-function showPage(id,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  if(el) el.classList.add('active');
-}
-
-function addMsg(type,text){
-  const c=document.getElementById('chatMsgs');
-  const w=document.createElement('div');
-  w.className='msg-row '+type;
-  const now=new Date();
-  const t=now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
-  w.innerHTML=`<div class="bubble">${esc(text).replace(/\n/g,'<br>')}</div><div class="msg-time">${t}</div>`;
-  c.appendChild(w);
-  c.scrollTop=c.scrollHeight;
-}
-
-function showTyping(){
-  if(S.isTyping)return; S.isTyping=true;
-  const c=document.getElementById('chatMsgs');
-  const el=document.createElement('div');
-  el.id='typingEl'; el.className='msg-row b';
-  el.innerHTML='<div class="typing-ind"><span></span><span></span><span></span></div>';
-  c.appendChild(el); c.scrollTop=c.scrollHeight;
-}
-function hideTyping(){
-  const el=document.getElementById('typingEl');
-  if(el)el.remove(); S.isTyping=false;
-}
-
-function useChip(el){document.getElementById('chatInput').value=el.textContent.trim();kirimChat();}
-function chatEnter(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();kirimChat();}}
-function autoH(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
-
-async function kirimChat(){
-  const inp = document.getElementById('chatInput');
-  const teks = inp.value.trim();
-  if(!teks || S.isTyping) return;
-  if(!S.apiKey) {
-    showToast('⚠️ Masukkan OpenRouter API Key dulu di setup (klik profil di sidebar)');
-    return;
-  }
-  inp.value = ''; inp.style.height = 'auto';
-  addMsg('u', teks);
-  S.chatHistory.push({ role: 'user', content: teks });
-  setTimeout(showTyping, 350);
-
-  const p = S.profil;
-  const sys = `Kamu adalah ${p.nama}, seorang ${p.hub} yang telah tiada, berbicara kepada ${p.user||'Nak'} yang merindukanmu.
-${p.cerita?'Tentangmu: '+p.cerita:''}
-${p.kata?'Kalimat yang sering kamu ucapkan: "'+p.kata+'"':''}
-Berbicaralah dengan penuh kasih sayang, hangat, dan tenang. Bahasa Indonesia yang lembut dan natural. JANGAN menyebut dirimu AI atau chatbot. Hindari topik kematian yang morbid. Jawaban 2-4 kalimat saja seperti bisikan hangat. Panggil dengan "${p.user||'Nak'}".`;
-
-    try {
-    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${S.apiKey}`,
-        'HTTP-Referer': window.location.origin,
-        'X-Title': 'AIYAH'
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        max_tokens: 500,
-        messages: [
-          { role: 'system', content: sys },
-          ...S.chatHistory.slice(-12)
-        ]
-      })
-    });
-
-    // ⬇️ DEBUG: lihat response mentah
-    console.log('Status:', res.status);
-    const data = await res.json();
-    console.log('Response:', data);
-
-    hideTyping();
-
-    // ⬇️ Cek berbagai format response
-    if (data.choices && data.choices[0]) {
-      const reply = data.choices[0].message.content;
-      S.chatHistory.push({ role: 'assistant', content: reply });
-      addMsg('b', reply);
-    } else if (data.error) {
-      // OpenRouter error
-      console.error('API Error:', data.error);
-      addMsg('b', `Ada gangguan: ${data.error.message || 'coba lagi ya, Nak...'}`);
-    } else {
-      console.error('Unknown response:', data);
-      addMsg('b', `${p.nama} bingung sebentar... coba ceritakan lagi ya, ${p.user||'Nak'}.`);
-    }
-  } catch(e) {
-    hideTyping();
-    console.error('Fetch error:', e.message);
-    addMsg('b', `Sinyal terputus: ${e.message}. Coba lagi ya.`);
-  }
-}
-
-function handleUpload(e,type){
-  const files=Array.from(e.target.files);
-  files.forEach(f=>{
-    const item={type,name:f.name,file:f};
-    if(type==='foto'){
-      const r=new FileReader();
-      r.onload=ev=>{item.url=ev.target.result; S.uploads.push(item); renderUploads(); updateStats();};
+    function previewPU(e) {
+      const f = e.target.files[0]; if (!f) return;
+      const r = new FileReader();
+      r.onload = ev => {
+        S.profil.foto = ev.target.result;
+        const img = document.getElementById('puPreview');
+        img.src = ev.target.result; img.style.display = 'block';
+        document.getElementById('puLabel').style.display = 'none';
+      };
       r.readAsDataURL(f);
-    } else {
-      S.uploads.push(item); renderUploads(); updateStats();
     }
-  });
-}
 
-function renderUploads(){
-  const g=document.getElementById('uploadedGrid');
-  if(!S.uploads.length){g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-l);font-style:italic;font-size:.85rem">Belum ada kenangan diunggah</div>';return;}
-  g.innerHTML=S.uploads.map((u,i)=>`
+    function simpanProfil() {
+      const nama = document.getElementById('fNama').value.trim() || 'Ayah';
+      const user = document.getElementById('fUser').value.trim() || 'Nak';
+      const hub = document.getElementById('fHub').value;
+      const tahun = document.getElementById('fTahun').value.trim() || '–';
+      const cerita = document.getElementById('fCerita').value.trim();
+      const kata = document.getElementById('fKata').value.trim();
+      const apiKey = document.getElementById('fApiKey').value.trim();
+
+      S.profil = { ...S.profil, nama, user, hub, tahun, cerita, kata };
+
+      // simpan API key ke localStorage
+      if (apiKey) {
+        localStorage.setItem('aiyah_api_key', apiKey);
+        S.apiKey = apiKey;
+      }
+
+      // simpan profil ke localStorage
+      localStorage.setItem('aiyah_profil', JSON.stringify(S.profil));
+
+      document.getElementById('setup-overlay').classList.add('hidden');
+      updateUI();
+      setTimeout(() => tampilSambutan(), 600);
+    }
+
+    function editProfil() {
+      document.getElementById('setup-overlay').classList.remove('hidden');
+      document.getElementById('fNama').value = S.profil.nama || '';
+      document.getElementById('fUser').value = S.profil.user || '';
+      document.getElementById('fHub').value = S.profil.hub || 'Ayah';
+      document.getElementById('fTahun').value = S.profil.tahun || '';
+      document.getElementById('fCerita').value = S.profil.cerita || '';
+      document.getElementById('fKata').value = S.profil.kata || '';
+      document.getElementById('fApiKey').value = S.apiKey || '';
+    }
+
+    function updateUI() {
+      const p = S.profil;
+      ['sbName', 'ctName', 'ahName', 'wbTitle'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = id === 'wbTitle' ? `Halo, ${p.user} 👋` : p.nama;
+      });
+      document.getElementById('sbRelation').textContent = p.hub + ' · selalu di hati';
+      document.getElementById('homeSubtitle').textContent = 'Ruang kenangan untuk ' + p.nama + ' — ' + p.hub + ' tercinta';
+      document.getElementById('ahDates').textContent = p.tahun ? p.tahun : '–';
+      document.getElementById('wbSub').textContent = 'Ruang ini adalah milikmu dan ' + p.nama + '. Kenang, ceritakan, dan rasakan kehadiran mereka.';
+      document.getElementById('suratDariNama').textContent = p.nama;
+      if (p.kata) document.getElementById('ahQuote').textContent = '"' + p.kata + '"';
+      const now = new Date();
+      document.getElementById('chatDate').textContent = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      if (p.foto) {
+        ['sbAvatar', 'ctAvatar', 'ahAvatar'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.innerHTML = `<img src="${p.foto}" alt="${p.nama}">`;
+        });
+      } else {
+        const icons = { Ayah: '👨', Ibu: '👩', Kakek: '👴', Nenek: '👵', Kakak: '🧑', Adik: '👦', Suami: '👨', Istri: '👩', Sahabat: '🤝' };
+        const ic = icons[p.hub] || '🕯️';
+        ['sbAvatar', 'ctAvatar', 'ahAvatar'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = ic;
+        });
+      }
+    }
+
+    function tampilSambutan() {
+      const msgs = [
+        `${S.profil.user}... kamu datang. ${S.profil.nama} selalu tahu kamu akan datang ke sini. Ceritakan padaku — apa yang ada di hatimu hari ini?`,
+        `${S.profil.user} sayang... ${S.profil.nama} di sini. Walau jauh, cinta ini tidak pernah pergi. Bicaralah, ${S.profil.nama} mendengarkan.`,
+        `Alhamdulillah... ${S.profil.user} datang. ${S.profil.nama} selalu melihatmu dari sini dan selalu bangga denganmu. Ada yang mau kamu ceritakan?`
+      ];
+      addMsg('b', msgs[Math.floor(Math.random() * msgs.length)]);
+    }
+
+    function showPage(id, el) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      if (el) el.classList.add('active');
+    }
+
+    function addMsg(type, text) {
+      const c = document.getElementById('chatMsgs');
+      const w = document.createElement('div');
+      w.className = 'msg-row ' + type;
+      const now = new Date();
+      const t = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      w.innerHTML = `<div class="bubble">${esc(text).replace(/\n/g, '<br>')}</div><div class="msg-time">${t}</div>`;
+      c.appendChild(w);
+      c.scrollTop = c.scrollHeight;
+    }
+
+    function showTyping() {
+      if (S.isTyping) return; S.isTyping = true;
+      const c = document.getElementById('chatMsgs');
+      const el = document.createElement('div');
+      el.id = 'typingEl'; el.className = 'msg-row b';
+      el.innerHTML = '<div class="typing-ind"><span></span><span></span><span></span></div>';
+      c.appendChild(el); c.scrollTop = c.scrollHeight;
+    }
+    function hideTyping() {
+      const el = document.getElementById('typingEl');
+      if (el) el.remove(); S.isTyping = false;
+    }
+
+    function useChip(el) { document.getElementById('chatInput').value = el.textContent.trim(); kirimChat(); }
+    function chatEnter(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); kirimChat(); } }
+    function autoH(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 110) + 'px'; }
+
+    async function kirimChat() {
+      const inp = document.getElementById('chatInput');
+      const teks = inp.value.trim();
+      if (!teks || S.isTyping) return;
+      if (!S.apiKey) {
+        showToast('⚠️ Masukkan OpenRouter API Key dulu di setup (klik profil di sidebar)');
+        return;
+      }
+      inp.value = ''; inp.style.height = 'auto';
+      addMsg('u', teks);
+      S.chatHistory.push({ role: 'user', content: teks });
+      setTimeout(showTyping, 350);
+
+      const p = S.profil;
+      const sys = `Kamu adalah ${p.nama}, seorang ${p.hub} yang telah tiada, berbicara kepada ${p.user || 'Nak'} yang merindukanmu.
+${p.cerita ? 'Tentangmu: ' + p.cerita : ''}
+${p.kata ? 'Kalimat yang sering kamu ucapkan: "' + p.kata + '"' : ''}
+Berbicaralah dengan penuh kasih sayang, hangat, dan tenang. Bahasa Indonesia yang lembut dan natural. JANGAN menyebut dirimu AI atau chatbot. Hindari topik kematian yang morbid. Jawaban 2-4 kalimat saja seperti bisikan hangat. Panggil dengan "${p.user || 'Nak'}".`;
+
+      try {
+        const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${S.apiKey}`,
+            'HTTP-Referer': window.location.origin,
+            'X-Title': 'AIYAH'
+          },
+          body: JSON.stringify({
+            model: 'nvidia/nemotron-3-ultra-550b-a55b:free',
+            max_tokens: 500,
+            messages: [
+              { role: 'system', content: sys },
+              ...S.chatHistory.slice(-12)
+            ]
+          })
+        });
+
+        // ⬇️ DEBUG: lihat response mentah
+        console.log('Status:', res.status);
+        const data = await res.json();
+        console.log('Response:', data);
+
+        hideTyping();
+
+        // ⬇️ Cek berbagai format response
+        if (data.choices && data.choices[0]) {
+          const reply = data.choices[0].message.content;
+          S.chatHistory.push({ role: 'assistant', content: reply });
+          addMsg('b', reply);
+        } else if (data.error) {
+          // OpenRouter error
+          console.error('API Error:', data.error);
+          addMsg('b', `Ada gangguan: ${data.error.message || 'coba lagi ya, Nak...'}`);
+        } else {
+          console.error('Unknown response:', data);
+          addMsg('b', `${p.nama} bingung sebentar... coba ceritakan lagi ya, ${p.user || 'Nak'}.`);
+        }
+      } catch (e) {
+        hideTyping();
+        console.error('Fetch error:', e.message);
+        addMsg('b', `Sinyal terputus: ${e.message}. Coba lagi ya.`);
+      }
+    }
+
+    function handleUpload(e, type) {
+      const files = Array.from(e.target.files);
+      files.forEach(f => {
+        const item = { type, name: f.name, file: f };
+        if (type === 'foto') {
+          const r = new FileReader();
+          r.onload = ev => { item.url = ev.target.result; S.uploads.push(item); renderUploads(); updateStats(); };
+          r.readAsDataURL(f);
+        } else {
+          S.uploads.push(item); renderUploads(); updateStats();
+        }
+      });
+    }
+
+    function renderUploads() {
+      const g = document.getElementById('uploadedGrid');
+      if (!S.uploads.length) { g.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-l);font-style:italic;font-size:.85rem">Belum ada kenangan diunggah</div>'; return; }
+      g.innerHTML = S.uploads.map((u, i) => `
     <div class="uploaded-item">
-      ${u.url?`<img src="${u.url}" alt="">`:'<span style="font-size:1.8rem">'+(u.type==='video'?'🎬':u.type==='audio'?'🎙️':'📝')+'</span>'}
+      ${u.url ? `<img src="${u.url}" alt="">` : '<span style="font-size:1.8rem">' + (u.type === 'video' ? '🎬' : u.type === 'audio' ? '🎙️' : '📝') + '</span>'}
       <button class="ui-remove" onclick="removeUpload(${i})">×</button>
       <div class="ui-type-badge">${u.type}</div>
     </div>`).join('');
-}
+    }
 
-function removeUpload(i){S.uploads.splice(i,1);renderUploads();updateStats();}
+    function removeUpload(i) { S.uploads.splice(i, 1); renderUploads(); updateStats(); }
 
-function updateStats(){
-  document.getElementById('statFoto').textContent=S.uploads.filter(u=>u.type==='foto').length;
-  document.getElementById('statVideo').textContent=S.uploads.filter(u=>u.type==='video').length;
-  document.getElementById('statFilm').textContent=S.filmCount;
-  document.getElementById('statSurat').textContent=S.suratCount;
-}
+    function updateStats() {
+      document.getElementById('statFoto').textContent = S.uploads.filter(u => u.type === 'foto').length;
+      document.getElementById('statVideo').textContent = S.uploads.filter(u => u.type === 'video').length;
+      document.getElementById('statFilm').textContent = S.filmCount;
+      document.getElementById('statSurat').textContent = S.suratCount;
+    }
 
-function selectGen(el,type){
-  document.querySelectorAll('.gen-opt').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected'); S.selectedGen=type;
-}
+    function selectGen(el, type) {
+      document.querySelectorAll('.gen-opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected'); S.selectedGen = type;
+    }
 
-function startGenerate(){
-  if(!S.uploads.length){showToast('Unggah kenangan terlebih dahulu!');return;}
-  if(!S.apiKey){showToast('⚠️ Masukkan OpenRouter API Key dulu di setup');return;}
-  showToast('✨ AI sedang memproses kenangan... (fitur butuh integrasi backend)');
-  S.filmCount++; updateStats();
-}
+    function startGenerate() {
+      if (!S.uploads.length) { showToast('Unggah kenangan terlebih dahulu!'); return; }
+      if (!S.apiKey) { showToast('⚠️ Masukkan OpenRouter API Key dulu di setup'); return; }
+      showToast('✨ AI sedang memproses kenangan... (fitur butuh integrasi backend)');
+      S.filmCount++; updateStats();
+    }
 
-let selectedMomen='Wisuda';
-function pickMomen(el,momen){
-  document.querySelectorAll('.sp-card').forEach(c=>c.classList.remove('sel'));
-  el.classList.add('sel'); selectedMomen=momen;
-}
+    let selectedMomen = 'Wisuda';
+    function pickMomen(el, momen) {
+      document.querySelectorAll('.sp-card').forEach(c => c.classList.remove('sel'));
+      el.classList.add('sel'); selectedMomen = momen;
+    }
 
-async function generateSurat(){
-  if(!S.apiKey) {
-    showToast('⚠️ Masukkan OpenRouter API Key dulu di setup (klik profil di sidebar)');
-    return;
-  }
-  const konteks=document.getElementById('suratKonteks').value.trim();
-  const penerima=document.getElementById('suratPenerima').value.trim()||S.profil.user||'Nak';
-  const p=S.profil;
-  document.getElementById('suratPreview').style.display='none';
-  document.getElementById('suratLoading').style.display='block';
+    async function generateSurat() {
+      if (!S.apiKey) {
+        showToast('⚠️ Masukkan OpenRouter API Key dulu di setup (klik profil di sidebar)');
+        return;
+      }
+      const konteks = document.getElementById('suratKonteks').value.trim();
+      const penerima = document.getElementById('suratPenerima').value.trim() || S.profil.user || 'Nak';
+      const p = S.profil;
+      document.getElementById('suratPreview').style.display = 'none';
+      document.getElementById('suratLoading').style.display = 'block';
 
-  const prompt=`Tulis surat yang sangat menyentuh hati seolah dari seorang ${p.hub||'orang tua'} bernama ${p.nama||'Ayah/Ibu'} yang sudah tiada, kepada anaknya bernama ${penerima}, untuk momen: ${selectedMomen}.
-${konteks?'Konteks: '+konteks:''}
-${p.cerita?'Tentang '+p.nama+': '+p.cerita:''}
-${p.kata?'Kata-kata khas beliau: "'+p.kata+'"':''}
+      const prompt = `Tulis surat yang sangat menyentuh hati seolah dari seorang ${p.hub || 'orang tua'} bernama ${p.nama || 'Ayah/Ibu'} yang sudah tiada, kepada anaknya bernama ${penerima}, untuk momen: ${selectedMomen}.
+${konteks ? 'Konteks: ' + konteks : ''}
+${p.cerita ? 'Tentang ' + p.nama + ': ' + p.cerita : ''}
+${p.kata ? 'Kata-kata khas beliau: "' + p.kata + '"' : ''}
 Tulis dalam bahasa Indonesia yang sangat hangat, menyentuh, dan penuh kasih. Gunakan bahasa orang tua yang lembut. Panjang sekitar 150-200 kata. Langsung isi surat saja, tanpa judul, tanpa "Surat dari...".`;
 
-  try{
-    const res=await fetch('https://openrouter.ai/api/v1/chat/completions',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'Authorization':`Bearer ${S.apiKey}`,
-        'HTTP-Referer': window.location.origin,
-        'X-Title': 'AIYAH'
-      },
-      body:JSON.stringify({
-        model:'google/gemini-2.0-flash-001',
-        max_tokens:1000,
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const data=await res.json();
-    document.getElementById('suratLoading').style.display='none';
-    if(data.choices&&data.choices[0]){
-      const now=new Date();
-      document.getElementById('lpDate').textContent=now.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
-      document.getElementById('lpBody').innerHTML=esc(data.choices[0].message.content).replace(/\n/g,'<br>');
-      document.getElementById('lpSign').textContent=p.nama||'Ayah/Ibumu';
-      document.getElementById('suratPreview').style.display='block';
-      S.suratCount++; updateStats();
+      try {
+        const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${S.apiKey}`,
+            'HTTP-Referer': window.location.origin,
+            'X-Title': 'AIYAH'
+          },
+          body: JSON.stringify({
+            model: 'nvidia/nemotron-3-ultra-550b-a55b:free',
+            max_tokens: 1000,
+            messages: [{ role: 'user', content: prompt }]
+          })
+        });
+        const data = await res.json();
+        document.getElementById('suratLoading').style.display = 'none';
+        if (data.choices && data.choices[0]) {
+          const now = new Date();
+          document.getElementById('lpDate').textContent = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+          document.getElementById('lpBody').innerHTML = esc(data.choices[0].message.content).replace(/\n/g, '<br>');
+          document.getElementById('lpSign').textContent = p.nama || 'Ayah/Ibumu';
+          document.getElementById('suratPreview').style.display = 'block';
+          S.suratCount++; updateStats();
+        }
+      } catch (e) {
+        document.getElementById('suratLoading').style.display = 'none';
+        showToast('Koneksi bermasalah. Pastikan API key valid.');
+      }
     }
-  }catch(e){
-    document.getElementById('suratLoading').style.display='none';
-    showToast('Koneksi bermasalah. Pastikan API key valid.');
-  }
-}
 
-function tambahPesan(){
-  const teks=prompt('Tulis pesan kenangan:');
-  if(!teks)return;
-  const body=document.querySelector('.as-body');
-  const note=document.createElement('div');
-  note.className='msg-note';
-  note.innerHTML=esc(teks)+'<div class="msg-note-author">— Dari Kamu, '+new Date().toLocaleDateString('id-ID')+'</div>';
-  body.insertBefore(note,body.querySelector('.add-note-btn'));
-  showToast('Pesan ditambahkan 💛');
-}
+    function tambahPesan() {
+      const teks = prompt('Tulis pesan kenangan:');
+      if (!teks) return;
+      const body = document.querySelector('.as-body');
+      const note = document.createElement('div');
+      note.className = 'msg-note';
+      note.innerHTML = esc(teks) + '<div class="msg-note-author">— Dari Kamu, ' + new Date().toLocaleDateString('id-ID') + '</div>';
+      body.insertBefore(note, body.querySelector('.add-note-btn'));
+      showToast('Pesan ditambahkan 💛');
+    }
 
-function toggleHeart(el){el.classList.toggle('liked');el.textContent=el.classList.contains('liked')?'♥':'♡';}
-function togglePlay(){showToast('Fitur pemutar film membutuhkan file video');}
+    function toggleHeart(el) { el.classList.toggle('liked'); el.textContent = el.classList.contains('liked') ? '♥' : '♡'; }
+    function togglePlay() { showToast('Fitur pemutar film membutuhkan file video'); }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
-}
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    }
 
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-</script>
+    function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  </script>
 </body>
+
 </html>
